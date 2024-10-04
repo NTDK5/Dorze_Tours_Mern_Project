@@ -25,7 +25,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: "https://dorze-tour.vercel.app/",
+    origin: "https://dorze-tour-3j16aroyo-nati2345s-projects.vercel.app/",
     methods: "GET,POST,PUT,DELETE", // Frontend URL
     credentials: true, // Allow credentials (cookies)
   })
