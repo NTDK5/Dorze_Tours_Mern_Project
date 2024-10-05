@@ -1,7 +1,7 @@
 import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://dorze-tours.onrender.com',
+  baseUrl: `${process.env.REACT_APP_API_URL}`,
 });
 
 export const apiSlice = createApi({
