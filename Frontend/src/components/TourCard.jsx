@@ -24,7 +24,7 @@ const TourCard = ({ tour }) => {
     <Link to={`/tour/${tour._id}`} className="bg-white shadow-lg rounded-lg">
       <img
         className="w-full h-[200px] lg:h-[300px]  object-cover object-center"
-        src={`${process.env.REACT_APP_API_URL}/${tour.imageUrl[0].replace(/\\/g, '/')}`}
+        src={`https://dorze-tours.onrender.com/${tour.imageUrl[0].replace(/\\/g, '/')}`}
         alt={tour.title}
       />
 
