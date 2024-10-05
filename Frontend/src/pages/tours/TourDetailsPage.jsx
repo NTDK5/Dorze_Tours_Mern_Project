@@ -147,7 +147,7 @@ const TourDetails = () => {
             <div className="lg:w-[80%] w-full mt-20 flex flex-col items-center lg:flex-row  gap-20">
               <img
                 className="lg:w-[70%] w-full lg:h-[600px] object-cover object-center"
-                src={`http://localhost:5000/${tour.imageUrl[0].replace(/\\/g, '/')}`}
+                src={`${process.env.REACT_APP_API_URL}/${tour.imageUrl[0].replace(/\\/g, '/')}`}
                 alt={tour.title}
               />
               <div className="lg:w-[25%] w-[80%] mt-6 lg:mt-0 bg-white shadow-lg rounded-md px-4 py-2">
