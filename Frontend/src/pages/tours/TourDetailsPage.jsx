@@ -124,7 +124,7 @@ const TourDetails = () => {
       <section className="w-full flex flex-col items-center justify-center">
         {tour ? (
           <>
-            <div className="w-[90%] mt-10">
+            <div className="w-[90%] mt-10 lg:w-[80%]">
               <h1 className="w-full text-left text-2xl lg:text-4xl font-bold">
                 {tour.title}
               </h1>
