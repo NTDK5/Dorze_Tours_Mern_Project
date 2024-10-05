@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from 'react';
-import { useFloating, shift, autoUpdate } from '@floating-ui/react-dom';
 import axios from 'axios';
 import { FaLanguage, FaCreditCard, FaClock, FaCompass } from 'react-icons/fa';
 import MapComponent from '../../components/MapComponent';
@@ -17,7 +16,6 @@ import {
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom'; // Ensure 'useNavigate' is imported
 import footerImg from '../../assets/images/Footer_img.png';
-import { StickyContainer, Sticky } from 'react-sticky';
 
 const LodgePage = () => {
   const [lodge, setLodge] = useState({});
