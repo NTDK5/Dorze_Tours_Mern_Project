@@ -41,11 +41,12 @@ app.set("trust proxy", true);
 app.use(
   "/uploads",
   (req, res, next) => {
-    res.setHeader("Cross-Origin-Resource-Policy", "same-site"); // or 'cross-origin' if served from a different domain
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin"); // Allow cross-origin resource sharing
     next();
   },
   express.static("uploads")
 );
+
 
 // Rate Limiter
 const limiter = rateLimit({
