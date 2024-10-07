@@ -25,7 +25,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: "https://dorze-tour.vercel.app",
+    origin: `${process.env.FRONTEND_URL}`,
     methods: "GET,POST,PUT,DELETE", // Frontend URL
     credentials: true, // Allow credentials (cookies)
   })
