@@ -25,8 +25,8 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: `${process.env.FRONTEND_URL}`,
-    methods: "GET,POST,PUT,DELETE", // Frontend URL
+    origin: process.env.FRONTEND_URL, // The frontend's local URL
+    methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
     credentials: true, // Allow credentials (cookies)
   })
 );
@@ -41,7 +41,7 @@ app.set("trust proxy", true);
 app.use(
   "/uploads",
   (req, res, next) => {
-    res.setHeader("Cross-Origin-Resource-Policy", "same-site"); // or 'cross-origin' if served from a different domain
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin"); // or 'cross-origin' if served from a different domain
     next();
   },
   express.static("uploads")

@@ -34,7 +34,7 @@ const Reviews = ({ tourId, tour }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/reviews/${tourId}?page=${page}&limit=${limit}`
+          `${process.env.REACT_APP_API_URL}/api/reviews/${tourId}?page=${page}&limit=${limit}`
         );
         setReviews(data.reviews);
         setPages(data.pages);

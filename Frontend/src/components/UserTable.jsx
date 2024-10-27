@@ -66,47 +66,53 @@ const UsersTable = ({ data }) => {
     });
 
   return (
-    <table
-      {...getTableProps()}
-      className="table-auto w-full border-collapse border border-gray-200"
-    >
-      <thead className="bg-[#323D4E] border-[1px] border-[#313D4F] rounded-lg text-left">
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-            {headerGroup.headers.map((column) => (
-              <th
-                {...column.getHeaderProps()}
-                className="px-8 py-3"
-                key={column.id}
-              >
-                {column.render('Header')}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody
-        className="bg-[#273142] border-[1px] border-[#313D4F] rounded-lg"
-        {...getTableBodyProps()}
+    <div className="overflow-hidden rounded-3xl">
+      <table
+        {...getTableProps()}
+        className="table-auto w-full border-collapse border border-gray-200"
       >
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()} key={row.id}>
-              {row.cells.map((cell) => (
-                <td
-                  {...cell.getCellProps()}
-                  className="px-8 py-2"
-                  key={cell.column.id}
+        <thead className="bg-[#323D4E] border-[1px] border-[#313D4F] rounded-lg text-left">
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+              {headerGroup.headers.map((column) => (
+                <th
+                  {...column.getHeaderProps()}
+                  className="px-8 py-3"
+                  key={column.id}
                 >
-                  {cell.render('Cell')}
-                </td>
+                  {column.render('Header')}
+                </th>
               ))}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody
+          className="bg-[#273142] border-[1px] border-[#313D4F] rounded-lg"
+          {...getTableBodyProps()}
+        >
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr
+                className="border-b-[1px] border-[#c6c6c61f]"
+                {...row.getRowProps()}
+                key={row.id}
+              >
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    className="px-8 py-2"
+                    key={cell.column.id}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

@@ -5,7 +5,32 @@ const asyncHandler = require("express-async-handler");
 const Tour = require("../models/tourModel");
 const Payment = require("../models/paymentModel");
 const Lodge = require("../models/lodgeModel");
-//@desc create paypal payment
+
+// @desc Get all payments
+// @route GET /api/payments
+// @access Private (Admin)
+const getAllPayments = asyncHandler(async (req, res) => {
+  try {
+    // Fetch all payments, optionally populate related fields like user and booking
+    const payments = await Payment.find()
+      .populate("user", "name email") // Populate user details (assuming the user model has name and email fields)
+      .populate("booking", "bookingDate status totalPrice"); // Populate booking details (adjust according to your booking schema)
+
+    // If no payments found
+    if (!payments) {
+      res.status(404);
+      throw new Error("No payments found");
+    }
+
+    // Send the response with all payment details
+    res.status(200).json(payments);
+  } catch (error) {
+    res.status(500);
+    throw new Error("Error fetching payments");
+  }
+});
+
+// @desc Create PayPal payment
 // @route POST /api/payments/create
 // @access Private
 const createPayPalPayment = asyncHandler(async (req, res) => {
@@ -15,7 +40,6 @@ const createPayPalPayment = asyncHandler(async (req, res) => {
   let customId;
 
   if (bookingType === "tour") {
-    // Fetch the tour information
     const tour = await Tour.findById(tourId);
     if (!tour) {
       res.status(404);
@@ -24,10 +48,7 @@ const createPayPalPayment = asyncHandler(async (req, res) => {
     itemDescription = `Booking for ${tour.title}`;
     customId = JSON.stringify({ tourId, bookingId });
   } else if (bookingType === "lodge") {
-    console.log(roomId);
-    // Fetch the lodge room information
     const lodge = await Lodge.findOne({ "roomTypes._id": roomId });
-    console.log(lodge);
     if (!lodge) {
       res.status(404);
       throw new Error("Lodge not found");
@@ -40,8 +61,6 @@ const createPayPalPayment = asyncHandler(async (req, res) => {
     throw new Error("Invalid booking type");
   }
 
-  console.log("Total Price:", totalAmount); // Debugging line
-
   const request = new paypal.orders.OrdersCreateRequest();
   request.prefer("return=representation");
   request.requestBody({
@@ -53,7 +72,7 @@ const createPayPalPayment = asyncHandler(async (req, res) => {
           value: totalAmount.toString(),
         },
         description: itemDescription,
-        custom_id: customId, // Save both IDs
+        custom_id: customId, // Custom ID for tracking booking
       },
     ],
     application_context: {
@@ -64,18 +83,27 @@ const createPayPalPayment = asyncHandler(async (req, res) => {
 
   try {
     const order = await client().execute(request);
-    const userId = req.user._id; // Assuming the user is authenticated and `req.user` is available
+    const userId = req.user._id; // Assuming user is authenticated
 
-    // Create a payment record in the database
+    // Create a payment record
     const payment = await Payment.create({
       booking: bookingId,
       user: userId,
       amount: totalAmount,
       paymentMethod: "paypal",
       paymentStatus: "pending",
-      transactionId: order.result.id,
+      transactionId: order.result.id, // Store PayPal order ID here
       bookingType: bookingType,
     });
+
+    // Update the booking with the paymentId
+    const booking = await Booking.findById(bookingId);
+    if (booking) {
+      booking.paymentId = payment._id;
+      await booking.save();
+    } else {
+      throw new Error("Booking not found");
+    }
 
     res.status(201).json({
       id: order.result.id,
@@ -95,7 +123,7 @@ const createPayPalPayment = asyncHandler(async (req, res) => {
 // @access Public
 const handlePayPalWebhook = async (req, res) => {
   const webhookEvent = req.body;
-  console.log("Webhook received:", webhookEvent);
+  console.log(webhookEvent);
 
   try {
     // Validate the webhook (optional but recommended)
@@ -133,49 +161,69 @@ const handlePaymentCaptureCompleted = async (webhookEvent) => {
   let tourId, roomId, bookingId;
 
   try {
-    // Try parsing custom_id if it's in JSON format
-    const customIdObj = JSON.parse(webhookEvent.resource.custom_id);
-    tourId = customIdObj.tourId;
-    roomId = customIdObj.roomId;
-    bookingId = customIdObj.bookingId;
+    // Ensure custom_id is defined before parsing
+    if (webhookEvent.resource.custom_id) {
+      const customIdObj = JSON.parse(webhookEvent.resource.custom_id);
+      tourId = customIdObj.tourId;
+      roomId = customIdObj.roomId;
+      bookingId = customIdObj.bookingId;
+    } else {
+      throw new Error("Missing custom_id in webhook event");
+    }
+
+    // Find and update the booking by ID
+    const booking = await Booking.findById(bookingId);
+    if (booking) {
+      booking.status = "confirmed";
+      booking.paymentResult = webhookEvent.resource; // Store the full webhook event for future reference
+      await booking.save();
+    } else {
+      console.error("Booking not found for ID:", bookingId);
+      return;
+    }
+
+    // Ensure supplementary_data exists before accessing order_id
+    const relatedIds = webhookEvent.resource.supplementary_data?.related_ids;
+    if (relatedIds?.order_id) {
+      // Find and update the payment by order ID
+      const payment = await Payment.findOne({
+        transactionId: relatedIds.order_id, // Use order ID to find the initial payment
+      });
+      if (payment) {
+        payment.transactionId = captureId; // Now store the capture ID
+        payment.paymentStatus = "completed";
+        await payment.save();
+      } else {
+        console.error("Payment not found for order ID:", relatedIds.order_id);
+        return;
+      }
+    } else {
+      console.error("Missing order_id in supplementary_data");
+      return;
+    }
   } catch (error) {
-    console.error("Error parsing custom_id:", error);
-    // Handle the case where custom_id is not in expected JSON format
-    return;
-  }
-
-  console.log(
-    "Parsed bookingId, tourId, and roomId:",
-    bookingId,
-    tourId,
-    roomId
-  );
-
-  // Find the booking by ID
-  const booking = await Booking.findById(bookingId);
-  if (booking) {
-    booking.status = "confirmed";
-    booking.paymentResult = webhookEvent.resource;
-    await booking.save();
-  }
-
-  // Find and update the payment
-  const payment = await Payment.findOne({ transactionId: captureId });
-  if (payment) {
-    payment.paymentStatus = "completed";
-    await payment.save();
+    console.error("Error handling webhook event:", error);
   }
 };
 
 // @desc Handle payment refund completed
 const handlePaymentRefunded = async (webhookEvent) => {
-  const captureId = webhookEvent.resource.id;
-  const bookingId = webhookEvent.resource.invoice_id; // Assuming booking ID was passed as invoice_id
+  const captureId = webhookEvent.resource.id; // This should be the correct capture ID
+  const bookingId = webhookEvent.resource.invoice_id; // Ensure this is correct
+
+  const payment = await Payment.findOne({ captureId });
+  console.log(payment); // Look up by captureId
+  if (!payment) {
+    console.error("Payment not found for captureId:", captureId);
+    return; // Early return if payment does not exist
+  }
 
   const booking = await Booking.findById(bookingId);
   if (booking) {
     booking.status = "refunded";
     await booking.save();
+  } else {
+    console.error("Booking not found for ID:", bookingId);
   }
 };
 
@@ -185,4 +233,4 @@ const validateWebhook = async (headers, body) => {
   return true; // For now, assume it's valid
 };
 
-module.exports = { createPayPalPayment, handlePayPalWebhook };
+module.exports = { createPayPalPayment, handlePayPalWebhook, getAllPayments };

@@ -11,10 +11,8 @@ function App() {
   AOS.init();
   const location = useLocation();
 
-  // Routes where the header should not be displayed
-  const noHeaderRoutes = ['/login', '/admin', '/register', '/float'];
+  const noHeaderRoutes = ['/login', '/admin', '/register'];
 
-  // Routes where the footer should not be displayed
   const noFooterRoutes = [
     '/login',
     '/register',
@@ -23,8 +21,6 @@ function App() {
     '/payment/success',
     '/profile',
     '/profile/booking_history',
-    '/float',
-    // '/dorze_lodge',
   ];
 
   return (
@@ -32,7 +28,8 @@ function App() {
       <ToastContainer />
       {!noHeaderRoutes.includes(location.pathname) && <Header />}
       <Outlet />
-      {!noFooterRoutes.includes(location.pathname) && <Footer />}
+      {!noFooterRoutes.includes(location.pathname) &&
+        !location.pathname.startsWith('/admin') && <Footer />}
     </>
   );
 }

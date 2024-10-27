@@ -36,20 +36,16 @@ import Checkout from './pages/payment/CheckoutPage';
 import PaymentSuccess from './pages/payment/SucessPage';
 import GalleryPage from './pages/gallery/GalleryPage';
 import LodgePage from './pages/lodge/LodgePage';
-import FloatingComponent from './components/Float';
-// import UsersPage from './pages/admin/UsersPage';
-// import AdminTourPage from './pages/admin/AdminTourPage';
+import AdminPaymentPage from './pages/payment/AdminPaymentPage';
 
 const queryClient = new QueryClient();
 
-// Define the routes including nested admin routes
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/float" element={<FloatingComponent />} />
       <Route path="/tour/:id" element={<TourDetails />} />
       <Route path="/about_us" element={<AboutPage />} />
       <Route path="/gallery" element={<GalleryPage />} />
@@ -70,6 +66,7 @@ const router = createBrowserRouter(
         <Route path="tours" element={<AdminToursPage />} />
         <Route path="create_tour" element={<CreateTourForm />} />
         <Route path="bookings" element={<AdminBookingPage />} />
+        <Route path="payments" element={<AdminPaymentPage />} />
       </Route>
     </Route>
   )

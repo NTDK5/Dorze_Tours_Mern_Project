@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import signInImage from '../../assets/image1.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -22,7 +22,9 @@ function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  useEffect(() => {
+    document.title = 'Dorze Tours - Register';
+  }, []);
   const options = useMemo(
     () =>
       countryList()
@@ -58,7 +60,7 @@ function RegisterPage() {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/users/`,
+        `${process.env.REACT_APP_API_URL}/api/users/`,
         {
           first_name: formData.first_name,
           last_name: formData.last_name,
@@ -69,7 +71,7 @@ function RegisterPage() {
         { withCredentials: true }
       );
 
-      alert(response.data.message); // Show registration message
+      alert(response.data.message);
       if (response.data.verified) {
         dispatch(setCredentials(response.data));
         navigate('/');
@@ -86,7 +88,6 @@ function RegisterPage() {
 
   return (
     <div className="w-full h-screen flex flex-col md:flex-row">
-      {/* Image section hidden on mobile */}
       <div className="hidden md:block w-1/2 h-full relative">
         <img
           src={signInImage}
@@ -96,7 +97,6 @@ function RegisterPage() {
         <div className="overlay w-full h-full absolute top-0 left-0 z-50"></div>
       </div>
 
-      {/* Form section */}
       <div className="w-full md:w-1/2 h-full flex items-center justify-center p-4">
         <div className="form_content w-full md:w-3/4 lg:w-1/2 flex flex-col gap-5">
           <h1 className="text-3xl md:text-5xl">

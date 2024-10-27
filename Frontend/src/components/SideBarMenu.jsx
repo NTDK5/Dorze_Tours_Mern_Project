@@ -1,76 +1,109 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import {
+  FaHome,
+  FaUsers,
+  FaSuitcase,
+  FaClipboardList,
+  FaMoneyBill,
+  FaStar,
+} from 'react-icons/fa';
 
 function SideBarMenu() {
   return (
-    <header className="w-[10%] h-screen sticky top-0 left-0 bg-[#273142] z-50 flex flex-col items-center px-4 py-[100px] text-white">
-      <div className="logo">Dorze Tours</div>
-      <nav className="w-[100%] flex flex-col items-center justify-center mt-[50px] gap-2">
+    <header className="h-screen sticky top-0 left-0 bg-[#273142] z-50 flex flex-col items-center py-[100px] text-white group hover:w-[200px] w-[60px] transition-all duration-300 ease-in-out">
+      <div className="logo opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+        Dorze Tours
+      </div>
+      <nav className="w-full flex flex-col items-center justify-center mt-[50px] gap-2">
         <NavLink
           to={'/admin'}
           end
           className={({ isActive }) =>
-            `w-[70%] px-4 py-2 rounded-md border-none text-left ${
+            `w-full px-4 py-2 rounded-md flex items-center gap-4 transition-all duration-300 ${
               isActive ? 'bg-[#4880FF]' : ''
             }`
           }
         >
-          Dashboard
+          <FaHome className="text-xl text-white flex-shrink-0" />
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+            Dashboard
+          </span>
         </NavLink>
+
         <NavLink
           to={'/admin/users'}
           end
           className={({ isActive }) =>
-            `w-[70%] px-4 py-2 rounded-md border-none ${
+            `w-full px-4 py-2 rounded-md flex items-center gap-4 transition-all duration-300 ${
               isActive ? 'bg-[#4880FF]' : ''
             }`
           }
         >
-          Users
+          <FaUsers className="text-xl flex-shrink-0" />
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+            Users
+          </span>
         </NavLink>
+
         <NavLink
           to={'/admin/tours'}
           end
           className={({ isActive }) =>
-            `w-[70%] px-4 py-2 rounded-md border-none ${
+            `w-full px-4 py-2 rounded-md flex items-center gap-4 transition-all duration-300 ${
               isActive ? 'bg-[#4880FF]' : ''
             }`
           }
         >
-          Tours
+          <FaSuitcase className="text-xl flex-shrink-0" />
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+            Tours
+          </span>
         </NavLink>
+
         <NavLink
           to={'/admin/bookings'}
           end
           className={({ isActive }) =>
-            `w-[70%] px-4 py-2 rounded-md border-none ${
+            `w-full px-4 py-2 rounded-md flex items-center gap-4 transition-all duration-300 ${
               isActive ? 'bg-[#4880FF]' : ''
             }`
           }
         >
-          Bookings
+          <FaClipboardList className="text-xl flex-shrink-0" />
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+            Bookings
+          </span>
         </NavLink>
+
         <NavLink
           to={'/admin/payments'}
           end
           className={({ isActive }) =>
-            `w-[70%] px-4 py-2 rounded-md border-none ${
+            `w-full px-4 py-2 rounded-md flex items-center gap-4 transition-all duration-300 ${
               isActive ? 'bg-[#4880FF]' : ''
             }`
           }
         >
-          Payments
+          <FaMoneyBill className="text-xl flex-shrink-0" />
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+            Payments
+          </span>
         </NavLink>
+
         <NavLink
           to={'/admin/reviews'}
           end
           className={({ isActive }) =>
-            `w-[70%] px-4 py-2 rounded-md border-none ${
+            `w-full px-4 py-2 rounded-md flex items-center gap-4 transition-all duration-300 ${
               isActive ? 'bg-[#4880FF]' : ''
             }`
           }
         >
-          Reviews
+          <FaStar className="text-xl flex-shrink-0" />
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+            Reviews
+          </span>
         </NavLink>
       </nav>
     </header>

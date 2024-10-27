@@ -12,7 +12,7 @@ const UserBookings = () => {
     const fetchUserBookings = async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/bookings/user`,
+          `${process.env.REACT_APP_API_URL}/api/bookings/user`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const UserBookings = () => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
         await axios.delete(
-          `${process.env.REACT_APP_API_URL}/bookings/${bookingId}`,
+          `${process.env.REACT_APP_API_URL}/api/bookings/${bookingId}/cancel`,
           {
             withCredentials: true,
           }
@@ -53,6 +53,30 @@ const UserBookings = () => {
     }
   };
 
+  const handleDeleteBooking = async (bookingId) => {
+    if (window.confirm('Are you sure you want to delete this booking?')) {
+      try {
+        await axios.delete(
+          `${process.env.REACT_APP_API_URL}/api/bookings/${bookingId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            withCredentials: true,
+          }
+        );
+        setBookings((prevBookings) =>
+          prevBookings.filter((booking) => booking._id !== bookingId)
+        );
+      } catch (err) {
+        console.error(
+          'Error deleting booking:',
+          err.response?.data?.message || err.message
+        );
+      }
+    }
+  };
+  console.log(bookings);
   if (loading) return <div className="text-center">Loading...</div>;
   if (error)
     return <div className="text-center text-red-500">Error: {error}</div>;
@@ -72,7 +96,6 @@ const UserBookings = () => {
               className="border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col md:justify-between"
             >
               <div className="flex flex-col md:flex-row md:items-center md:justify-between md:w-full">
-                {/* Display based on booking type */}
                 {booking.bookingType === 'Tour' ? (
                   <Link
                     to={`/tour/${booking.tour?._id}`}
@@ -90,7 +113,7 @@ const UserBookings = () => {
                 )}
 
                 <span
-                  className={`px-3 py-1 rounded-full text-sm ${
+                  className={`px-3 py-1 rounded-full w-max text-sm ${
                     booking.status === 'confirmed'
                       ? 'bg-green-200 text-green-800 font-bold'
                       : 'bg-red-200 text-red-800'
@@ -99,36 +122,69 @@ const UserBookings = () => {
                   {booking.status}
                 </span>
               </div>
-              {/* Display destination or location */}
-              <div className="flex justify-between items-center text-gray-600 text-sm mb-2 md:mb-0 md:w-full">
-                <div>
+
+              <div className="flex justify-between items-center text-gray-600 text-sm mb-2 md:mb-0 md:w-full mt-4">
+                <div className="flex items-center gap-1 ">
                   <FaMapMarkerAlt className="mr-2" />
                   {booking.bookingType === 'Tour'
                     ? booking.tour?.destination
                     : booking.lodge?.location}
                 </div>
+                {booking.bookingType === 'Lodge' && (
+                  <div className="flex flex-col ">
+                    <span className="flex items-center">
+                      <FaCalendarAlt className="mr-1" /> Check-in:{' '}
+                      {new Date(booking.checkInDate).toLocaleDateString()}
+                    </span>
+                  </div>
+                )}
                 <div>
                   {booking.bookingType === 'Tour' ? '' : booking.roomType}
                 </div>
               </div>
-              <div className="flex items-center justify-between text-gray-700 text-sm">
+
+              <div className="flex items-center justify-between text-gray-700 text-sm mt-2">
                 <div className="flex items-center">
                   <FaUsers className="mr-2" /> {booking.numberOfPeople} People
                 </div>
-                <div className="flex items-center">
-                  <FaCalendarAlt className="mr-2" />
-                  {new Date(booking.createdAt).toLocaleDateString()}
-                </div>
+                {booking.bookingType === 'Lodge' && (
+                  <span className="flex items-center">
+                    <FaCalendarAlt className="mr-1" /> Check-out:{' '}
+                    {new Date(booking.checkOutDate).toLocaleDateString()}
+                  </span>
+                )}
+
+                {booking.bookingType === 'Tour' && (
+                  <span className="flex items-center">
+                    <FaCalendarAlt className="mr-1" /> Booking-Date:{' '}
+                    {new Date(booking.bookingDate).toLocaleDateString()}
+                  </span>
+                )}
                 <div className="font-semibold text-[#1C2B38]">
                   ${booking.totalPrice.toFixed(2)}
                 </div>
               </div>
-              <button
-                onClick={() => handleCancelBooking(booking._id)}
-                className="mt-4 px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition duration-300"
-              >
-                Cancel Booking
-              </button>
+              <div className="flex space-x-4 mt-4">
+                <button
+                  onClick={() => handleCancelBooking(booking._id)}
+                  className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition duration-300"
+                  style={{
+                    display: booking.status === 'cancelled' ? 'none' : 'block',
+                  }}
+                >
+                  Cancel Booking
+                </button>
+                {(booking.status === 'pending' ||
+                  booking.status === 'cancelled' ||
+                  booking.status === 'refunded') && (
+                  <button
+                    onClick={() => handleDeleteBooking(booking._id)}
+                    className="px-4 py-2 bg-gray-500 text-white text-sm rounded-lg hover:bg-gray-600 transition duration-300"
+                  >
+                    Delete Booking
+                  </button>
+                )}
+              </div>
             </li>
           ))}
         </ul>

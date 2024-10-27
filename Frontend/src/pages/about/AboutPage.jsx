@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import gallery1 from '../../assets/images/gallery1.jpg';
 import gallery2 from '../../assets/images/gallery2.jpg';
 import gallery3 from '../../assets/images/gallerry3.jpg';
@@ -13,10 +13,13 @@ import {
   FaGem,
 } from 'react-icons/fa';
 import ctaImage from '../../assets/images/Rectangle 158.png';
-
+import { Link } from 'react-router-dom';
 import lodgeImage from '../../assets/images/lodge.png';
 
 const AboutPage = () => {
+  useEffect(() => {
+    document.title = 'Dorze Tours - About Us ';
+  }, []);
   return (
     <div className="about_container w-full min-h-screen flex items-center flex-col">
       {/* Hero Section */}
@@ -39,12 +42,12 @@ const AboutPage = () => {
           </h1>
           <p className="mt-10 pr-0 md:pr-10">
             Embark on an extraordinary journey through the heart of Ethiopia
-            with Dinka Tour Ethiopia. Our mission is to introduce you to the
+            with Dorze Tours Ethiopia. Our mission is to introduce you to the
             wonders of this ancient land, offering immersive cultural
             experiences, historical explorations, and encounters with
             breathtaking natural landscapes. From the rock-hewn churches of
             Lalibela to the majestic Simien Mountains, Ethiopia is a land of
-            unparalleled beauty and cultural significance. At Dinka Tour
+            unparalleled beauty and cultural significance. At Dorze Tours
             Ethiopia, we invite you to delve into the country&apos;s rich
             heritage, explore its diverse ethnic groups, and witness age-old
             traditions that have stood the test of time.
@@ -199,7 +202,7 @@ const AboutPage = () => {
 
       <section className="w-full h-max relative my-[100px]">
         <img
-          className="object-cover object-center w-full h-[60vh] md:h-[70vh] lg:h-[80vh] z-10"
+          className="object-cover object-center w-full h-[80vh] md:h-[70vh] lg:h-[80vh] z-10"
           src={ctaImage}
           alt="Background"
         />
@@ -207,15 +210,21 @@ const AboutPage = () => {
         <div className="absolute w-full top-0 h-full flex items-center justify-center">
           <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row lg:gap-8 items-center justify-between">
             <img
-              className="w-[60%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
+              className="hidden lg:block w-[60%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
               src={lodgeImage}
               alt="Guide"
             />
-            <div className="w-full md:w-[50%] z-30 gap-4 md:gap-[30px] text-white flex flex-col items-start justify-center mt-6 md:mt-0">
-              <h1 className="font-bold text-3xl md:text-4xl lg:text-5xl tracking-wide">
+
+            <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
+              <img
+                className="lg:hidden w-[60%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
+                src={lodgeImage}
+                alt="Guide"
+              />
+              <h1 className="font-bold text-4xl md:text-5xl lg:text-5xl tracking-wide mb-4">
                 Experience the Heart of Ethiopia at Dorze Lodge
               </h1>
-              <p className="text-sm md:text-base">
+              <p className="text-sm md:text-base mb-6">
                 Discover the beauty and tranquility of Dorze Lodge, nestled in
                 the lush highlands of Ethiopia. Escape the ordinary with
                 stunning views, traditional hospitality, and an unforgettable
@@ -223,9 +232,12 @@ const AboutPage = () => {
                 Dorze Lodge offers the perfect retreat. Book your stay today and
                 immerse yourself in the vibrant heritage of the Dorze people.
               </p>
-              <button className="bg-[#FFDA32] text-white font-bold py-2 px-8 lg:px-12 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]">
+              <Link
+                to="/our_packages"
+                className="bg-[#FFDA32] text-white font-bold py-3 px-6 lg:px-8 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
+              >
                 Book Now
-              </button>
+              </Link>
             </div>
           </div>
         </div>

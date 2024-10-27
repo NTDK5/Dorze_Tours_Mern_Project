@@ -73,7 +73,7 @@ function Header() {
     <header
       id="header"
       className={`top-0 w-full h-[8vh] p-4 z-50 sticky transition-all duration-300 ${
-        isScrolled || !isHomePage
+        isScrolled || !isHomePage || menuOpen
           ? 'bg-white text-black shadow-lg'
           : 'bg-transparent text-white'
       }`}
@@ -96,9 +96,9 @@ function Header() {
 
         {/* Navigation Menu */}
         <nav
-          className={`md:flex items-center space-x-8 transition-all duration-300 ${
+          className={`md:flex items-center space-x-8 transition-all duration-300 bg-white  rounded-[25px] ${
             menuOpen
-              ? 'block bg-white shadow-md absolute top-[8vh] right-0 w-full rounded-md'
+              ? 'block bg-white shadow-md absolute top-[8vh] right-0 w-full rounded-md px-0 '
               : 'hidden'
           } md:block`}
         >
@@ -109,11 +109,11 @@ function Header() {
           >
             <Link
               to="/"
-              className={`block hover:border-white hover:border-b-2 hover:text-[#F29404] ${
+              className={`block hover:border-white hover:border-b-2 hover:text-[#F29404] py-0 ${
                 isActive('/')
-                  ? 'text-[#F29404] border-b-2 border-white font-bold'
+                  ? 'lg:text-white text-[#F29404] py-2 px-6 rounded-[25px] font-bold lg:bg-[#F29404]'
                   : ''
-              } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
+              } ${menuOpen ? 'py-2 px-0 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
               Home
@@ -165,7 +165,7 @@ function Header() {
             {!userInfo && (
               <Link
                 to="/login"
-                className={`bg-[#F29404] h-max rounded-lg px-6 py-1 text-white md:inline-block ${
+                className={` h-max rounded-[25px] px-6 py-2 md:inline-block ${
                   menuOpen
                     ? 'w-full text-center flex justify-center items-center rounded-md'
                     : ''
