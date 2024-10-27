@@ -7,6 +7,10 @@ const bookingSchema = mongoose.Schema(
       ref: "User", // Reference to the User model
       required: true,
     },
+    paymentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment",
+    },
     tour: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Tour", // Reference to the Tour model
@@ -37,7 +41,7 @@ const bookingSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "canceled"], // Status options
+      enum: ["pending", "confirmed", "cancelled", "refunded"], // Status options
       default: "pending", // Default status is pending
     },
     paymentMethod: {

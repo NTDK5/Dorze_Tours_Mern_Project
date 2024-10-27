@@ -4,10 +4,9 @@ import axios from 'axios';
 import BookingTable from '../../components/BookingTable';
 import { useNavigate } from 'react-router-dom';
 
-// Fetch function for bookings
 const fetchTotalBookings = async () => {
   const { data } = await axios.get(
-    `${process.env.REACT_APP_API_URL}/bookings`,
+    `${process.env.REACT_APP_API_URL}/api/bookings`,
     {
       withCredentials: true,
     }
@@ -19,25 +18,25 @@ const AdminBookingPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Fetch bookings
   const { data, isLoading, isError } = useQuery({
     queryKey: ['totalBookings'],
     queryFn: fetchTotalBookings,
   });
 
-  // Delete mutation
   const deleteBooking = useMutation({
     mutationFn: async (id) => {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/bookings/${id}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/bookings/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['totalBookings']); // Refetch bookings after deletion
+      queryClient.invalidateQueries(['totalBookings']);
     },
   });
 
-  // Handle delete function
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this booking?')) {
       deleteBooking.mutate(id);

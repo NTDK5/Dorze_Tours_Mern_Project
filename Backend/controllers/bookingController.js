@@ -3,6 +3,9 @@ const Booking = require("../models/bookingModel.js");
 const Tour = require("../models/tourModel.js");
 const Lodge = require("../models/lodgeModel.js");
 const User = require("../models/userModel.js");
+const cron = require("node-cron");
+const paypal = require("@paypal/checkout-server-sdk");
+const { client } = require("../utils/paypalClient");
 
 // @desc Create a new booking
 // @route POST /api/bookings
@@ -17,7 +20,8 @@ const createBooking = asyncHandler(async (req, res) => {
     notes,
     checkInDate,
     checkOutDate,
-    roomType, // New field for room type
+    roomType,
+    bookingDate,
   } = req.body;
   const userId = req.user._id; // Assuming the user is authenticated and `req.user` is available
 
@@ -74,6 +78,7 @@ const createBooking = asyncHandler(async (req, res) => {
     paymentMethod,
     notes,
     ...bookingDetails,
+    bookingDate,
   });
 
   res.status(201).json(booking);
@@ -164,6 +169,82 @@ const getUserBookings = asyncHandler(async (req, res) => {
     throw new Error("No bookings found for this user");
   }
 });
+// @desc Cancel bookings
+// @route DELETE /api/bookings/:bookingId/cancel
+// @access Private
+const handleCancelBooking = async (req, res) => {
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findById(bookingId).populate("paymentId");
+  console.log(bookingId);
+  console.log(booking);
+  if (!booking) {
+    return res.status(404).json({ message: "Booking not found" });
+  }
+
+  // Ensure booking has a paymentId and status is confirmed
+  if (booking.status === "confirmed" && booking.paymentId) {
+    const captureId = booking.paymentId.transactionId; // Use the transactionId as the captureId
+    console.log("capture id:", captureId);
+    // Ensure you have a valid capture ID before proceeding
+    if (!captureId) {
+      return res.status(400).json({ message: "Capture ID not found" });
+    }
+
+    // Log the capture ID
+    console.log("Attempting to refund capture ID:", captureId);
+
+    const request = new paypal.payments.CapturesRefundRequest(captureId);
+
+    try {
+      // Fetch capture details to check status
+      const captureDetailsRequest = new paypal.payments.CapturesGetRequest(
+        captureId
+      );
+      const captureDetailsResponse = await client().execute(
+        captureDetailsRequest
+      );
+      console.log("Capture details:", captureDetailsResponse);
+
+      // Process the refund if the capture is valid
+      const refund = await client().execute(request);
+      booking.status = "refunded";
+      await booking.save();
+      return res.status(200).json({ message: "Booking canceled and refunded" });
+    } catch (error) {
+      console.error("Error processing refund:", error);
+      return res.status(500).json({ message: "Refund failed" });
+    }
+  } else {
+    // Cancel without refund
+    booking.status = "canceled";
+    await booking.save();
+
+    return res.status(200).json({ message: "Booking canceled" });
+  }
+};
+
+// Function to check and cancel expired bookings
+const checkAndCancelExpiredBookings = async () => {
+  const now = new Date();
+  const bookings = await Booking.find({
+    status: "pending",
+    createdAt: { $lt: new Date(now.getTime() - 24 * 60 * 60 * 1000) },
+  });
+
+  for (const booking of bookings) {
+    booking.status = "cancelled";
+    await booking.save();
+  }
+
+  console.log("Checked and cancelled expired bookings");
+};
+
+// Schedule the task to run every hour
+cron.schedule("0 * * * *", checkAndCancelExpiredBookings);
+
+// Run the task immediately when the server starts
+checkAndCancelExpiredBookings();
 
 module.exports = {
   createBooking,
@@ -172,4 +253,5 @@ module.exports = {
   updateBooking,
   deleteBooking,
   getUserBookings,
+  handleCancelBooking,
 };

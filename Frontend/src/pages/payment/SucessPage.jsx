@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { FaCheckCircle } from 'react-icons/fa'; // Import check icon
+import { FaCheckCircle } from 'react-icons/fa';
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();

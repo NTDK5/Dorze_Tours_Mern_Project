@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify'; // Import toast
+import { toast } from 'react-toastify';
 
 const CreateTourForm = () => {
   const [formData, setFormData] = useState({
@@ -69,20 +69,19 @@ const CreateTourForm = () => {
   };
 
   const deleteActivity = (day, activityIndex) => {
-    setItinerary(
-      (prevItinerary) =>
-        prevItinerary
-          .map((item) =>
-            item.day === day
-              ? {
-                  ...item,
-                  activities: item.activities.filter(
-                    (_, i) => i !== activityIndex
-                  ),
-                }
-              : item
-          )
-          .filter((item) => item.activities.length > 0) // Remove days with no activities
+    setItinerary((prevItinerary) =>
+      prevItinerary
+        .map((item) =>
+          item.day === day
+            ? {
+                ...item,
+                activities: item.activities.filter(
+                  (_, i) => i !== activityIndex
+                ),
+              }
+            : item
+        )
+        .filter((item) => item.activities.length > 0)
     );
   };
 
@@ -102,7 +101,7 @@ const CreateTourForm = () => {
     });
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}`, data, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/tours`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

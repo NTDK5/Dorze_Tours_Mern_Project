@@ -2,7 +2,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { FaLanguage, FaCreditCard, FaClock, FaCompass } from 'react-icons/fa';
+import {
+  FaLanguage,
+  FaCreditCard,
+  FaClock,
+  FaCompass,
+  FaMapMarkedAlt,
+} from 'react-icons/fa';
 import MapComponent from '../../components/MapComponent';
 import {
   FaFacebook,
@@ -33,7 +39,9 @@ const LodgePage = () => {
   const [isReady, setIsReady] = useState(false);
   const referenceRef = useRef(null);
   const floatingRef = useRef(null);
-
+  useEffect(() => {
+    document.title = 'Dorze Lodge';
+  }, []);
   const lodgeCoordinates = {
     latitude: 6.180743649457227,
     longitude: 37.57992938705831,
@@ -43,10 +51,9 @@ const LodgePage = () => {
   useEffect(() => {
     const fetchLodge = async () => {
       try {
-        console.log('API URL:', process.env.REACT_APP_API_URL);
         setLoading(true);
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/lodge`,
+          `${process.env.REACT_APP_API_URL}/api/lodge`,
           {
             withCredentials: true,
           }
@@ -61,18 +68,30 @@ const LodgePage = () => {
 
     fetchLodge();
   }, []);
-
   const handleBooking = async (e) => {
     e.preventDefault();
 
-    // Calculate the number of nights between check-in and check-out dates
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
+
+    // Ensure check-out is after check-in
+    if (checkOut <= checkIn) {
+      alert('Check-out date must be after check-in date');
+      return;
+    }
+
     const numberOfNights = Math.ceil(
       (checkOut - checkIn) / (1000 * 60 * 60 * 24)
-    ); // Get number of nights
+    );
 
     const room = lodge.roomTypes.find((room) => room.type === selectedRoomType);
+
+    // Safeguard for negative room price
+    const totalAmount = room.price * numberOfNights;
+    if (totalAmount <= 0) {
+      alert('Invalid total price calculated');
+      return;
+    }
 
     const bookingData = {
       bookingType: 'Lodge',
@@ -87,7 +106,7 @@ const LodgePage = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.BACKEND_URL}/bookings`,
+        `${process.env.REACT_APP_API_URL}/api/bookings`,
         bookingData,
         {
           withCredentials: true,
@@ -95,7 +114,7 @@ const LodgePage = () => {
       );
       navigate('/checkout', {
         state: {
-          totalAmount: room.price * numberOfNights, // Calculate total price based on nights
+          totalAmount: totalAmount,
           roomId: room._id,
           numberOfPeople: guests,
           bookingId: response.data._id,
@@ -113,11 +132,24 @@ const LodgePage = () => {
   return (
     <>
       <div className="flex w-full justify-center">
-        <div className="w-full :w-[90%] md:w-[80%] lg:w-[70%] flex flex-col items-center">
+        <div className="w-full md:w-[80%] lg:w-[70%] flex flex-col items-center">
           <div className="w-full py-8 sm:py-12 md:py-16 flex flex-col lg:flex-row lg:items-center justify-between">
-            <h1 className="text-2xl md:text-4xl ml-4 lg:ml-0 font-poppins font-[700] text-[#121210de]">
-              {lodge.name}
-            </h1>
+            <div>
+              <h1 className="text-2xl md:text-4xl ml-4 lg:ml-0 font-poppins font-[700] text-[#121210de]">
+                {lodge.name}
+              </h1>
+              <p className="flex flex-col lg:flex-row lg:items-center px-2 text-gray-700 mt-4 gap-2">
+                <div className="flex items-center">
+                  {' '}
+                  <FaMapMarker className="text-gray-500" /> Dorze, Ethiopia{' '}
+                </div>
+
+                <span className="text-gray-500 ">
+                  You will be welcomed by{' '}
+                  <span className="font-bold">Tsehai Bogale</span>
+                </span>
+              </p>
+            </div>
             <div className="flex w-full lg:w-max py-6 px-2 lg:gap-8 z-30 items-center justify-between lg:justify-end lg:mt-0 lg:static lg:bg-none bg-white fixed bottom-0">
               <p className="font-mulish">
                 From{' '}
@@ -126,9 +158,12 @@ const LodgePage = () => {
                 </span>{' '}
                 night
               </p>
-              <button className="bg-[#FFDA32]  text-white font-bold py-2 px-4 lg:px-12 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:scale-105 focus:outline-none">
+              <a
+                href="#book_form"
+                className="bg-[#FFDA32]  text-white font-bold py-2 px-4 lg:px-12 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:scale-105 focus:outline-none"
+              >
                 Book Now
-              </button>
+              </a>
             </div>
           </div>
 
@@ -159,8 +194,8 @@ const LodgePage = () => {
             </div>
           </div>
 
-          <div className="w-[90%] flex flex-col-reverse justify-between lg:flex-row">
-            <div className="w-full lg:w-[60%] mt-4">
+          <div className="w-full flex flex-col items-center justify-between lg:items-start lg:flex-row mt-8">
+            <div className="w-full lg:w-[60%] mt-10 px-4 lg:mt-0 lg:p-0">
               <div className="">
                 <h1 className="text-xl lg:text-2xl font-poppins font-bold">
                   Description
@@ -343,7 +378,10 @@ const LodgePage = () => {
               </div>
             </div>
 
-            <div className="bg-white shadow-lg rounded-md p-4 w-full lg:w-[35%] mt-6 h-max lg:mt-0  lg:sticky lg:top-[10vh]">
+            <div
+              id="book_form"
+              className="bg-white shadow-lg rounded-md p-4 w-[90%] lg:w-[35%] mt-6 h-max lg:mt-0  lg:sticky lg:top-[10vh] border-[1px] border-[#ffd9329a]"
+            >
               <h1 className="text-lg lg:text-xl font-semibold">Bookings</h1>
               <form
                 onSubmit={handleBooking}

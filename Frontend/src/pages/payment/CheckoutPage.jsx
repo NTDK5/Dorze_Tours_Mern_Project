@@ -4,22 +4,22 @@
 import React, { useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios for making API requests
+import axios from 'axios';
 
 const Checkout = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // Use navigate for redirecting
+  const navigate = useNavigate();
   const { tourId, roomId, numberOfPeople, totalAmount, bookingId } =
-    location.state || {}; // Get necessary details from location state
+    location.state || {};
 
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-  const [errorMessage, setErrorMessage] = useState(''); // Error state
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Handle successful payment
   const handlePaymentSuccess = (details) => {
     console.log('Payment successful:', details);
-    // Optionally verify the payment status using the order ID
-    navigate('/payment/success'); // Redirect to a success page
+
+    navigate('/payment/success');
   };
 
   // Handle payment error
@@ -30,25 +30,20 @@ const Checkout = () => {
     );
   };
 
-  // Handle payment cancellation
   const handlePaymentCancel = () => {
     setErrorMessage('Payment was cancelled.');
   };
-
-  // Create PayPal order
   const createOrder = async () => {
     try {
       setIsLoading(true);
-      setErrorMessage(''); // Reset error message
+      setErrorMessage('');
 
-      // Determine if it's a tour or lodge booking and send the correct ID and bookingType
       const payload = tourId
-        ? { bookingType: 'tour', tourId, totalAmount, bookingId } // Add bookingType for tours
-        : { bookingType: 'lodge', roomId, totalAmount, bookingId }; // Add bookingType for lodges
+        ? { bookingType: 'tour', tourId, totalAmount, bookingId }
+        : { bookingType: 'lodge', roomId, totalAmount, bookingId };
 
-      // Call your backend to create the PayPal payment
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/payments/create`,
+        `${process.env.REACT_APP_API_URL}/api/payments/create`,
         payload,
         {
           withCredentials: true,
@@ -57,7 +52,7 @@ const Checkout = () => {
       setIsLoading(false);
       const { id } = response.data;
       console.log(response.data);
-      return id; // Return the PayPal order ID
+      return id;
     } catch (error) {
       setIsLoading(false);
       console.error('Error creating PayPal order:', error);
@@ -73,7 +68,6 @@ const Checkout = () => {
         {totalAmount ? (
           <>
             <p className="text-lg mb-4">Total Amount: ${totalAmount}</p>{' '}
-            {/* Display the total amount */}
             {errorMessage && (
               <p className="text-red-500 mb-4">{errorMessage}</p>
             )}
@@ -94,8 +88,8 @@ const Checkout = () => {
                     .then(handlePaymentSuccess)
                     .catch(handlePaymentError);
                 }}
-                onError={handlePaymentError} // Handle errors
-                onCancel={handlePaymentCancel} // Handle cancellations
+                onError={handlePaymentError}
+                onCancel={handlePaymentCancel}
               />
             </PayPalScriptProvider>
             {isLoading && (

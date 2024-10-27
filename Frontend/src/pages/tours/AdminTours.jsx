@@ -1,36 +1,33 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchTotalTours } from '../../services/tourApi'; // Fetch tours function
+import { fetchTotalTours } from '../../services/tourApi';
 import axios from 'axios';
-import ToursTable from '../../components/TourTable'; // Tours table component
+import ToursTable from '../../components/TourTable';
 import { useNavigate } from 'react-router-dom';
 
 const AdminToursPage = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient(); // For refreshing the query after deletion
+  const queryClient = useQueryClient();
 
-  // Fetch tours
   const { data, isLoading, isError } = useQuery({
     queryKey: ['totalTours'],
     queryFn: fetchTotalTours,
   });
 
-  // Delete mutation
   const deleteTour = useMutation({
     mutationFn: async (id) => {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/tours/${id}`, {
-        withCredentials: true, // Ensure cookies are sent with the request
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/tours/${id}`, {
+        withCredentials: true,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['totalTours']); // Refetch tours after deletion
+      queryClient.invalidateQueries(['totalTours']);
     },
   });
 
-  // Handle delete function
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this tour?')) {
-      deleteTour.mutate(id); // Trigger the mutation
+      deleteTour.mutate(id);
     }
   };
 

@@ -10,11 +10,13 @@ import {
   FaClock,
   FaCar,
   FaStar,
+  FaTree,
+  FaUsers,
 } from 'react-icons/fa';
 import { destinationData } from '../../assets/data/destinationData';
 import { testimonials } from '../../assets/data/testimonialData.js';
 import ctaImage from '../../assets/images/Rectangle 158.png';
-import image3 from '../../assets/images/image 3.png';
+import image3 from '../../assets/images/image 3.jpg';
 import lodgeImage from '../../assets/images/lodge.png';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchTotalTours } from '../../services/tourApi';
@@ -24,6 +26,9 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 function HomePage() {
+  useEffect(() => {
+    document.title = 'Dorze Tours - Home ';
+  }, []);
   const [verificationMessage, setVerificationMessage] = useState('');
   const { userInfo } = useSelector((state) => state.auth);
   const { data, isLoading, isError } = useQuery({
@@ -40,7 +45,7 @@ function HomePage() {
     }
     setFilter(searchQuery);
   };
-  // Filtered tours based on selected destination
+
   const filteredTours = tourData.filter((tour) => tour.destination === filter);
   const filteredDestination = destinationData.find(
     (destination) => destination.name === filter
@@ -49,15 +54,14 @@ function HomePage() {
   return (
     <div className="relative flex flex-col items-center justify-center">
       <section className="hero-section relative top-[-8vh] left-0 w-full h-[104vh] bg-cover bg-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-white/70"></div>
+        <div className="absolute inset-0 hero-gradient"></div>
         <div className="relative flex flex-col items-center justify-center h-full text-center text-white px-4">
-          <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">
-            We Find the Best Tour for You
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">
+            Explore the Timeless Beauty of Ethiopia
           </h1>
-          <p className="mt-4 text-base sm:text-lg md:text-xl lg:max-w-3xl">
-            This is a paragraph in the center of the hero section. You can add
-            more details here. This is a paragraph in the center of the hero
-            section. You can add more details.
+          <p className="mt-4 text-base lg:text-center text-sm w-[80%] md:text-xl lg:w-[60%]">
+            Discover Ethiopia&apos;s most breathtaking destinations with
+            personalized tours that bring you closer to the heart of Africa.
           </p>
           <Link
             to="/our_packages"
@@ -118,7 +122,7 @@ function HomePage() {
           </div>
           <button
             onClick={handleSearch}
-            className="mt-4 bg-[#FFDA32] text-white font-bold py-2 px-8 rounded-lg lg:px-12 shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
+            className="mt-4 w-full lg:w-max bg-[#FFDA32] text-white font-bold py-2 px-8 rounded-lg lg:px-12 shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
           >
             Search
           </button>
@@ -158,12 +162,30 @@ function HomePage() {
             src={filteredDestination.image}
             alt={filteredDestination.name}
           />
-          <div className="w-[95%] md:w-[90%] bg-white flex flex-col md:flex-row mt-6 py-6 px-4 md:px-6 transform translate-y-[-20%] md:translate-y-[-40%] shadow-lg">
+          <div className="w-[95%] md:w-[90%] bg-[#F9FDFF] flex flex-col gap-4 lg:gap-0 md:flex-row mt-6 py-16 px-4 md:px-6 transform translate-y-[-20%] md:translate-y-[-40%] shadow-lg">
             <div className="w-full md:w-[60%]">
               <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
                 Discover {filteredDestination.name}
               </h2>
               <p>{filteredDestination.description}</p>
+            </div>
+            <div className="w-full lg:w-[40%] flex flex-wrap gap-2">
+              <div className="bg-white shadow-sm flex items-center gap-2 px-6 py-2 text-[#D176E0]">
+                <FaCar />
+                <p>Private Transport</p>
+              </div>
+              <div className="bg-white shadow-sm flex items-center gap-2 px-6 py-2 text-[#7BBCB0]">
+                <FaTree />
+                <p>Nature & Adventure</p>
+              </div>
+              <div className="bg-white shadow-sm flex items-center gap-2 px-6 py-2 text-[#FC3131]">
+                <FaMapMarkerAlt />
+                <p>Local Visit</p>
+              </div>
+              <div className="bg-white shadow-sm flex items-center gap-2 px-6 py-2 text-[#5C9BDE]">
+                <FaUsers />
+                <p>Family Trip</p>
+              </div>
             </div>
           </div>
         </div>
@@ -182,24 +204,29 @@ function HomePage() {
       </section>
       <section className="w-full h-max relative my-[100px]">
         <img
-          className="object-cover object-center w-full h-[60vh] md:h-[70vh] lg:h-[80vh] z-10"
+          className="object-cover object-center w-full h-[70vh] md:h-[70vh] lg:h-[80vh] z-10"
           src={ctaImage}
           alt="Background"
         />
-        <div className="absolute w-full top-0 left-0 h-full bg-gradient-to-br from-[#48057D] to-[#2ADDE7] z-20 opacity-[80%] backdrop-blur-[25px]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#48057D] to-[#2ADDE7] opacity-80 backdrop-blur-[25px] z-20"></div>
 
-        <div className="absolute w-full top-0 h-full flex items-center justify-center">
-          <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row items-center justify-between">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row items-center gap-[80px] justify-center">
             <img
-              className="w-[30%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
+              className="hidden lg:block w-[20%] md:w-[10%] lg:w-[30%] object-center z-30 rounded-lg shadow-lg"
               src={image3}
               alt="Guide"
             />
-            <div className="w-full md:w-[50%] z-30 gap-4 md:gap-[30px] text-white flex flex-col items-start justify-center mt-6 md:mt-0">
-              <h1 className="font-bold text-3xl md:text-4xl lg:text-5xl tracking-wide">
+            <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-center lg:items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
+              <img
+                className="w-[40%] md:w-[50%] lg:hidden lg:w-[60%] object-center  z-30 rounded-lg shadow-lg"
+                src={image3}
+                alt="Guide"
+              />
+              <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl tracking-wide mb-4">
                 EXPERT GUIDES
               </h1>
-              <p className="text-sm md:text-base">
+              <p className="text-sm md:text-base mb-6">
                 Amet minim mollit non deserunt ullamco est sit aliqua dolor do
                 amet sint. Velit officia consequat duis enim velit mollit.
                 Exercitation veniam consequat sunt nostrud amet. Amet minim
@@ -209,7 +236,7 @@ function HomePage() {
               </p>
               <Link
                 to="/our_packages"
-                className="bg-[#FFDA32] text-white font-bold py-2 px-8 lg:px-12 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
+                className="bg-[#FFDA32] text-white font-bold py-3 px-6 lg:px-8 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
               >
                 Book Now
               </Link>
@@ -250,7 +277,7 @@ function HomePage() {
       </section>
       <section className="w-full h-max relative my-[100px]">
         <img
-          className="object-cover object-center w-full h-[60vh] md:h-[70vh] lg:h-[80vh] z-10"
+          className="object-cover object-center w-full h-[70vh] md:h-[70vh] lg:h-[80vh] z-10"
           src={ctaImage}
           alt="Background"
         />
@@ -258,15 +285,21 @@ function HomePage() {
         <div className="absolute w-full top-0 h-full flex items-center justify-center">
           <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row lg:gap-8 items-center justify-between">
             <img
-              className="w-[60%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
+              className="hidden lg:block w-[60%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
               src={lodgeImage}
               alt="Guide"
             />
-            <div className="w-full md:w-[50%] z-30 gap-4 md:gap-[30px] text-white flex flex-col items-start justify-center mt-6 md:mt-0">
-              <h1 className="font-bold text-3xl md:text-4xl lg:text-5xl tracking-wide">
+
+            <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
+              <img
+                className="lg:hidden w-[60%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
+                src={lodgeImage}
+                alt="Guide"
+              />
+              <h1 className="font-bold text-4xl md:text-5xl lg:text-5xl tracking-wide mb-4">
                 Experience the Heart of Ethiopia at Dorze Lodge
               </h1>
-              <p className="text-sm md:text-base">
+              <p className="text-sm md:text-base mb-6">
                 Discover the beauty and tranquility of Dorze Lodge, nestled in
                 the lush highlands of Ethiopia. Escape the ordinary with
                 stunning views, traditional hospitality, and an unforgettable
@@ -275,8 +308,8 @@ function HomePage() {
                 immerse yourself in the vibrant heritage of the Dorze people.
               </p>
               <Link
-                to="/dorze_lodge"
-                className="bg-[#FFDA32] text-white font-bold py-2 px-8 lg:px-12 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
+                to="/our_packages"
+                className="bg-[#FFDA32] text-white font-bold py-3 px-6 lg:px-8 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
               >
                 Book Now
               </Link>

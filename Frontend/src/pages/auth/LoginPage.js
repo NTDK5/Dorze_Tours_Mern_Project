@@ -14,10 +14,16 @@ function LoginPage() {
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    document.title = 'Dorze Tours - Login';
+  }, []);
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      if (userInfo.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     }
   }, [navigate, userInfo]);
 
@@ -28,13 +34,18 @@ function LoginPage() {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/users/auth`,
+        `${process.env.REACT_APP_API_URL}/api/users/auth`,
         { email, password },
         { withCredentials: true }
       );
+      console.log(response.data.role === 'admin');
 
       dispatch(setCredentials(response.data));
-      navigate('/');
+      if (response.data.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       if (error.response && error.response.status === 403) {
         setError('Email not verified. Please check your inbox.');
@@ -50,7 +61,6 @@ function LoginPage() {
 
   return (
     <div className="w-full h-[100vh] flex flex-col md:flex-row">
-      {/* Image section hidden on mobile */}
       <div className="hidden md:block md:w-1/2 h-full relative">
         <img
           src={signInImage}
@@ -60,7 +70,6 @@ function LoginPage() {
         <div className="overlay w-full h-full absolute top-0 left-0 z-50"></div>
       </div>
 
-      {/* Form section with shadow on mobile */}
       <div className="w-full md:w-1/2  h-full flex items-center justify-center px-4 md:px-0 shadow-lg md:shadow-none">
         <div className="form_content w-full md:w-3/4 lg:w-1/2 flex flex-col gap-5">
           <h1 className="text-3xl md:text-5xl">

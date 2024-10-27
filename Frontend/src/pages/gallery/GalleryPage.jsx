@@ -1,21 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { photos } from '../../assets/data/galleryPhotos';
 import LightGallery from 'lightgallery/react';
 
-// import styles
 import 'lightgallery/css/lightgallery.css';
 import 'lightgallery/css/lg-zoom.css';
 import 'lightgallery/css/lg-thumbnail.css';
 
-// // If you want you can use SCSS instead of css
-// import 'lightgallery/scss/lightgallery.scss';
-// import 'lightgallery/scss/lg-zoom.scss';
-
-// import plugins if you need
 import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 
 const GalleryPage = () => {
+  useEffect(() => {
+    document.title = 'Dorze Tours - Gallery';
+  }, []);
   return (
     <div className="gallery w-full flex flex-col py-[50px] lg:py-[100px] items-center">
       <h1 className="gallery-title w-full text-center p-10 text-3xl lg:text-5xl font-semibold">

@@ -17,7 +17,7 @@ function EmailVerification() {
 
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/users/verify-email?token=${token}`,
+          `${process.env.REACT_APP_API_URL}/api/users/verify-email?token=${token}`,
           {
             withCredentials: true,
           }

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { FaCar, FaClock, FaUsers, FaStar } from 'react-icons/fa'; // React icons
+import React, { useState, useEffect } from 'react';
+import { FaCar, FaClock, FaUsers, FaStar } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
-import { fetchTotalTours } from '../../services/tourApi'; // Fetch tours function
+import { fetchTotalTours } from '../../services/tourApi';
 import { Link } from 'react-router-dom';
 
 const TourPackagesPage = () => {
   const [selectedDestinations, setSelectedDestinations] = useState(['All']);
   const [selectedDurations, setSelectedDurations] = useState(['All']);
-
+  useEffect(() => {
+    document.title = 'Dorze Tours - Our Packages ';
+  }, []);
   const { data, isLoading, isError } = useQuery({
     queryKey: ['totalTours'],
     queryFn: fetchTotalTours,
@@ -106,7 +108,6 @@ const TourPackagesPage = () => {
           </div>
         </div>
 
-        {/* Tour List Section */}
         <div className="w-full lg:w-2/3 p-4">
           <h2 className="font-bold text-2xl mb-4">Available Tours</h2>
           {isLoading && <p>Loading tours...</p>}
@@ -119,7 +120,7 @@ const TourPackagesPage = () => {
                 className="flex flex-col sm:flex-row border rounded-lg shadow-lg w-full"
               >
                 <img
-                  src={`http://localhost:5000/${tour.imageUrl[0].replace(/\\/g, '/')}`}
+                  src={`${process.env.REACT_APP_API_URL}/${tour.imageUrl[0].replace(/\\/g, '/')}`}
                   alt={tour.title}
                   className="min-h-40 sm:w-[30%] object-cover rounded-md"
                 />

@@ -32,7 +32,7 @@ const TourDetails = () => {
   const [paymentMethod, setPaymentMethod] = useState('paypal');
   const [notes, setNotes] = useState('');
   const navigate = useNavigate();
-  const { id } = useParams(); // This id represents the tour ID from the URL
+  const { id } = useParams();
   const { userInfo } = useSelector((state) => state.auth);
   useEffect(() => {
     const getTour = async () => {
@@ -49,7 +49,9 @@ const TourDetails = () => {
 
     getTour();
   }, [id]);
-
+  useEffect(() => {
+    document.title = `Dorze Tours - ${tour?.title}`;
+  }, [tour]);
   // Fetch tours
   const { data, isLoading, isError } = useQuery({
     queryKey: ['totalTours'],
@@ -69,13 +71,14 @@ const TourDetails = () => {
         numberOfPeople,
         paymentMethod,
         notes,
+        bookingDate,
       };
 
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/bookings`,
+        `${process.env.REACT_APP_API_URL}/api/bookings`,
         bookingData,
         {
-          withCredentials: true, // Include cookies for authentication
+          withCredentials: true,
         }
       );
       console.log(data);
@@ -94,11 +97,9 @@ const TourDetails = () => {
   };
 
   const handlePaymentSuccess = (details) => {
-    // Handle successful payment capture here, e.g., save booking in the database
     console.log('Payment successful:', details);
   };
   const handleSaveToWishlist = () => {
-    // Logic to handle saving to the wishlist
     console.log('Saved to wishlist');
   };
 
@@ -124,7 +125,7 @@ const TourDetails = () => {
       <section className="w-full flex flex-col items-center justify-center">
         {tour ? (
           <>
-            <div className="w-[90%] mt-10">
+            <div className="w-[90%] lg:w-[80%] mt-10">
               <h1 className="w-full text-left text-2xl lg:text-4xl font-bold">
                 {tour.title}
               </h1>
@@ -144,13 +145,146 @@ const TourDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="lg:w-[80%] w-full mt-20 flex flex-col items-center lg:flex-row  gap-20">
-              <img
-                className="lg:w-[70%] w-full lg:h-[600px] object-cover object-center"
-                src={`http://localhost:5000/${tour.imageUrl[0].replace(/\\/g, '/')}`}
-                alt={tour.title}
-              />
-              <div className="lg:w-[25%] w-[80%] mt-6 lg:mt-0 bg-white shadow-lg rounded-md px-4 py-2">
+            <div className="lg:w-[80%] w-full mt-10 flex flex-col items-center lg:items-start lg:flex-row  gap-20">
+              <div className="flex w-full lg:hidden py-6 px-2 lg:gap-8 z-30 items-center justify-between lg:justify-end lg:mt-0 lg:static lg:bg-none bg-white fixed bottom-0">
+                <p className="font-mulish">
+                  From{' '}
+                  <span className="text-xl lg:text-2xl">${tour?.price}/</span>{' '}
+                  Person
+                </p>
+                <a
+                  href="#book_form"
+                  className="bg-[#FFDA32]  text-white font-bold py-2 px-4 lg:px-12 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:scale-105 focus:outline-none"
+                >
+                  Book Now
+                </a>
+              </div>
+              <div className="lg:w-[70%] w-full">
+                <img
+                  className=" w-full lg:h-[600px] object-cover object-center"
+                  src={`${process.env.REACT_APP_API_URL}/${tour.imageUrl[0].replace(/\\/g, '/')}`}
+                  alt={tour.title}
+                />
+                <div className="w-full">
+                  <div className="features w-full  bg-[#F8FAFC] flex flex-col items-center justify-center py-8 gap-4">
+                    <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
+                      <div className="w-full md:w-[45%]">
+                        <div className="w-full items-start py-2 flex gap-5">
+                          <FaUndoAlt className="mt-2 text-[#d5212d]" />
+                          <div>
+                            <h1 className="text-[18px] text-top font-semibold">
+                              Free Cancellation
+                            </h1>
+                            <p className="text-gray-400">
+                              Cancel up to 24 hours in advance to receive a full
+                              refund
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="w-full md:w-[45%]">
+                        <div className="w-full items-start py-2 flex gap-5">
+                          <FaMapMarkerAlt className="mt-2 text-[#d5212d]" />
+                          <div>
+                            <h1 className="text-[18px] font-semibold">
+                              Health precautions
+                            </h1>
+                            <p className="text-gray-400">
+                              Special health and safety measures apply. Learn
+                              more
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
+                      <div className="w-full md:w-[45%]">
+                        <div className="w-full items-start py-2 flex gap-5">
+                          <FaTicketAlt className="mt-2 text-[#d5212d]" />
+                          <div>
+                            <h1 className="text-[18px] text-top font-semibold">
+                              Mobile ticketing
+                            </h1>
+                            <p className="text-gray-400">
+                              Use your phone or print your voucher
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="w-full md:w-[45%]">
+                        <div className="w-full items-start py-2 flex gap-5">
+                          <FaClock className="mt-2 text-[#d5212d]" />
+                          <div>
+                            <h1 className="text-[18px] font-semibold">
+                              Duration {tour.duration}
+                            </h1>
+                            <p className="text-gray-400">
+                              Check availability to see starting times.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
+                      <div className="w-full md:w-[45%]">
+                        <div className="w-full items-start py-2 flex gap-5">
+                          <FaUndoAlt className="mt-2 text-[#d5212d]" />
+                          <div>
+                            <h1 className="text-[18px] text-top font-semibold">
+                              Instant confirmation
+                            </h1>
+                            <p className="text-gray-400">
+                              Don’t wait for the confirmation!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="w-full md:w-[45%]">
+                        <div className="w-full items-start py-2 flex gap-5">
+                          <FaUndoAlt className="mt-2 text-[#d5212d]" />
+                          <div>
+                            <h1 className="text-[18px] font-semibold">
+                              Live tour guide in English
+                            </h1>
+                            <p className="text-gray-400">English</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:w-[70%] px-4 w-full mt-10">
+                  <h2 className="text-2xl font-bold mb-4">Description</h2>
+                  <p className="text-gray-700">{tour.description}</p>
+                </div>
+
+                <div className="lg:w-[70%] w-full mt-10">
+                  <h2 className="text-2xl font-bold mb-4">Activities</h2>
+                  <h3 className="text-xl font-semibold mb-2 ml-4">
+                    Day {tour.itinerary[0].day}
+                  </h3>
+                  <ul className="list-disc pl-5 text-gray-700 ml-6">
+                    {tour.itinerary[0].activities.map((activityItem) => (
+                      <li key={activityItem._id} className="mb-2">
+                        <span className="font-semibold">
+                          {activityItem.time}:{' '}
+                        </span>
+                        {activityItem.activity}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div
+                id="book_form"
+                className="lg:w-[25%] h-max lg:sticky lg:top-[10vh] w-[80%] mt-6 lg:mt-0 bg-white shadow-lg rounded-md px-4 py-2"
+              >
                 <h1 className="w-full text-xl text-black py-2 border-b-2 border-gray-50 font-semibold">
                   Bookings
                 </h1>
@@ -232,129 +366,7 @@ const TourDetails = () => {
                 </form>
               </div>
             </div>
-            <div className="lg:w-[80%] w-full">
-              {/* Features Section */}
-              <div className="w-full">
-                <div className="features w-full lg:w-[70%] bg-[#F8FAFC] flex flex-col items-center justify-center my-10 gap-4 py-10">
-                  {/* Row 1 */}
-                  <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
-                    {/* Free Cancellation */}
-                    <div className="w-full md:w-[45%]">
-                      <div className="w-full items-start py-2 flex gap-5">
-                        <FaUndoAlt className="mt-2 text-[#d5212d]" />
-                        <div>
-                          <h1 className="text-[18px] text-top font-semibold">
-                            Free Cancellation
-                          </h1>
-                          <p className="text-gray-400">
-                            Cancel up to 24 hours in advance to receive a full
-                            refund
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    {/* Health Precautions */}
-                    <div className="w-full md:w-[45%]">
-                      <div className="w-full items-start py-2 flex gap-5">
-                        <FaMapMarkerAlt className="mt-2 text-[#d5212d]" />
-                        <div>
-                          <h1 className="text-[18px] font-semibold">
-                            Health precautions
-                          </h1>
-                          <p className="text-gray-400">
-                            Special health and safety measures apply. Learn more
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Row 2 */}
-                  <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
-                    {/* Mobile Ticketing */}
-                    <div className="w-full md:w-[45%]">
-                      <div className="w-full items-start py-2 flex gap-5">
-                        <FaTicketAlt className="mt-2 text-[#d5212d]" />
-                        <div>
-                          <h1 className="text-[18px] text-top font-semibold">
-                            Mobile ticketing
-                          </h1>
-                          <p className="text-gray-400">
-                            Use your phone or print your voucher
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    {/* Duration */}
-                    <div className="w-full md:w-[45%]">
-                      <div className="w-full items-start py-2 flex gap-5">
-                        <FaClock className="mt-2 text-[#d5212d]" />
-                        <div>
-                          <h1 className="text-[18px] font-semibold">
-                            Duration {tour.duration}
-                          </h1>
-                          <p className="text-gray-400">
-                            Check availability to see starting times.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Row 3 */}
-                  <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
-                    {/* Instant Confirmation */}
-                    <div className="w-full md:w-[45%]">
-                      <div className="w-full items-start py-2 flex gap-5">
-                        <FaUndoAlt className="mt-2 text-[#d5212d]" />
-                        <div>
-                          <h1 className="text-[18px] text-top font-semibold">
-                            Instant confirmation
-                          </h1>
-                          <p className="text-gray-400">
-                            Don’t wait for the confirmation!
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    {/* Live Tour Guide */}
-                    <div className="w-full md:w-[45%]">
-                      <div className="w-full items-start py-2 flex gap-5">
-                        <FaUndoAlt className="mt-2 text-[#d5212d]" />
-                        <div>
-                          <h1 className="text-[18px] font-semibold">
-                            Live tour guide in English
-                          </h1>
-                          <p className="text-gray-400">English</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Description Section */}
-              <div className="lg:w-[70%] px-4 w-full mt-10">
-                <h2 className="text-2xl font-bold mb-4">Description</h2>
-                <p className="text-gray-700">{tour.description}</p>
-              </div>
-
-              {/* Activities Section */}
-              <div className="lg:w-[70%] w-full mt-10">
-                <h2 className="text-2xl font-bold mb-4">Activities</h2>
-                <h3 className="text-xl font-semibold mb-2 ml-4">
-                  Day {tour.itinerary[0].day}
-                </h3>
-                <ul className="list-disc pl-5 text-gray-700 ml-6">
-                  {tour.itinerary[0].activities.map((activityItem) => (
-                    <li key={activityItem._id} className="mb-2">
-                      <span className="font-semibold">
-                        {activityItem.time}:{' '}
-                      </span>
-                      {activityItem.activity}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
             <section className=" w-full lg:w-[80%] flex flex-col items-center justify-center py-10">
               <h1 className="text-2xl font-bold w-full text-left my-5">
                 Related Tours
