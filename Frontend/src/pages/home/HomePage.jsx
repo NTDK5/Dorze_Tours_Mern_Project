@@ -134,8 +134,9 @@ function HomePage() {
             Explore Popular Destinations
           </h1>
           <p className="mt-4 text-base md:text-lg">
-            Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-            sint. Velit officia consequat duis enim velit mollit.
+            Discover unique places around the world, from breathtaking
+            landscapes to vibrant cities, and immerse yourself in unforgettable
+            experiences.
           </p>
         </div>
         <div className="px-4 md:px-10 w-[90%] md:w-[70%] lg:w-[50%] flex flex-wrap justify-center gap-4 lg:gap-8 mt-10 md:mt-14">
@@ -308,7 +309,7 @@ function HomePage() {
                 immerse yourself in the vibrant heritage of the Dorze people.
               </p>
               <Link
-                to="/our_packages"
+                to="/lodge"
                 className="bg-[#FFDA32] text-white font-bold py-3 px-6 lg:px-8 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
               >
                 Book Now
