@@ -309,7 +309,7 @@ function HomePage() {
                 immerse yourself in the vibrant heritage of the Dorze people.
               </p>
               <Link
-                to="/lodge"
+                to="/dorze_lodge"
                 className="bg-[#FFDA32] text-white font-bold py-3 px-6 lg:px-8 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
               >
                 Book Now
