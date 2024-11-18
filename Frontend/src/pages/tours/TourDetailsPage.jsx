@@ -22,6 +22,7 @@ import {
 import TourCard from '../../components/TourCard';
 import Reviews from '../../components/Reviews';
 import { useSelector } from 'react-redux';
+import LoadingScreen from '../../components/Loading';
 
 const TourDetails = () => {
   const [tour, setTour] = useState(null);
@@ -117,7 +118,7 @@ const TourDetails = () => {
     return stars;
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaLock, FaUser } from 'react-icons/fa';
+import { FaLock, FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
 import signInImage from '../../assets/image1.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,14 +9,17 @@ import { setCredentials } from '../../states/slices/authSlice';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
   useEffect(() => {
     document.title = 'Dorze Tours - Login';
   }, []);
+
   useEffect(() => {
     if (userInfo) {
       if (userInfo.role === 'admin') {
@@ -38,7 +41,6 @@ function LoginPage() {
         { email, password },
         { withCredentials: true }
       );
-      console.log(response.data.role === 'admin');
 
       dispatch(setCredentials(response.data));
       if (response.data.role === 'admin') {
@@ -70,7 +72,7 @@ function LoginPage() {
         <div className="overlay w-full h-full absolute top-0 left-0 z-50"></div>
       </div>
 
-      <div className="w-full md:w-1/2  h-full flex items-center justify-center px-4 md:px-0 shadow-lg md:shadow-none">
+      <div className="w-full md:w-1/2 h-full flex items-center justify-center px-4 md:px-0 shadow-lg md:shadow-none">
         <div className="form_content w-full md:w-3/4 lg:w-1/2 flex flex-col gap-5">
           <h1 className="text-3xl md:text-5xl">
             Welcome Back to{' '}
@@ -98,13 +100,20 @@ function LoginPage() {
             <div className="form_group relative mb-4 md:mb-6">
               <FaLock className="input-icon absolute top-1/2 transform -translate-y-1/2 left-2 text-[#d5212d4f]" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="input pl-10 py-2 border border-gray-300 w-full rounded"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-1/2 transform -translate-y-1/2 right-2 text-[#d5212d4f] focus:outline-none"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
             <button
               type="submit"

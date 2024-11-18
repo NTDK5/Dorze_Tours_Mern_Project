@@ -11,12 +11,12 @@ function App() {
   AOS.init();
   const location = useLocation();
 
-  const noHeaderRoutes = ['/login', '/admin', '/register'];
+  const noHeaderRoutes = ['/login', '/admin', '/register', '/verify_email'];
 
   const noFooterRoutes = [
     '/login',
     '/register',
-    '/verify-email',
+    '/verify_email',
     '/checkout',
     '/payment/success',
     '/profile',

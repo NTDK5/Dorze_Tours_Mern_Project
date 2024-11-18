@@ -37,7 +37,8 @@ import PaymentSuccess from './pages/payment/SucessPage';
 import GalleryPage from './pages/gallery/GalleryPage';
 import LodgePage from './pages/lodge/LodgePage';
 import AdminPaymentPage from './pages/payment/AdminPaymentPage';
-
+import VerifyEmailPage from './pages/EmailVerify';
+import ErrorBoundary from './ErrorBoundary';
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter(
@@ -51,7 +52,7 @@ const router = createBrowserRouter(
       <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/dorze_lodge" element={<LodgePage />} />
       <Route path="/our_packages" element={<TourPackagesPage />} />
-      <Route path="/verify-email" element={<EmailVerification />} />
+      <Route path="/verify_email" element={<VerifyEmailPage />} />
       <Route path="/profile" element={<UserProfilePage />} />
       <Route path="profile" element={<UserProfilePage />}>
         <Route index={true} element={<Profile />} />
@@ -77,7 +78,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <ErrorBoundary>
+          <RouterProvider router={router} />
+        </ErrorBoundary>
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>
