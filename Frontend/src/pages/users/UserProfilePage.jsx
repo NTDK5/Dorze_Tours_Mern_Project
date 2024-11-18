@@ -1,5 +1,10 @@
 import React from 'react';
-import { FaMapMarkerAlt, FaUser } from 'react-icons/fa';
+import {
+  FaClipboardList,
+  FaIdBadge,
+  FaMapMarkerAlt,
+  FaUser,
+} from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { NavLink, Outlet } from 'react-router-dom';
 
@@ -33,21 +38,21 @@ const UserProfilePage = () => {
               to="/profile"
               className={({ isActive }) =>
                 isActive
-                  ? 'w-full flex py-[16px] pl-[30px] bg-[#7BBCB0] text-white'
-                  : 'w-full flex py-[16px] pl-[30px] text-gray-600 hover:bg-gray-100'
+                  ? 'w-full flex py-[16px] pl-[30px] bg-[#F29404] text-white items-center gap-2'
+                  : 'w-full flex py-[16px] pl-[30px] text-gray-600 hover:bg-gray-100  items-center gap-2'
               }
             >
-              Profile Information
+              <FaIdBadge /> Profile Information
             </NavLink>
             <NavLink
               to="/profile/booking_history"
               className={({ isActive }) =>
                 isActive
-                  ? 'w-full flex py-[16px] pl-[30px] bg-[#7BBCB0] text-white'
-                  : 'w-full flex py-[16px] pl-[30px] text-gray-600 hover:bg-gray-100'
+                  ? 'w-full flex py-[16px] pl-[30px] bg-[#F29404] text-white items-center gap-2'
+                  : 'w-full flex py-[16px] pl-[30px] text-gray-600 hover:bg-gray-100 items-center gap-2'
               }
             >
-              Booking History
+              <FaClipboardList /> Booking History
             </NavLink>
           </div>
         </div>

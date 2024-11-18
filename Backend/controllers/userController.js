@@ -74,7 +74,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
 
     if (user) {
-      const verificationLink = `http://localhost:3000/verify-email?token=${verificationToken}`;
+      const verificationLink = `${process.env.FRONTEND_URL}}/verify-email?token=${verificationToken}`;
       const token = generateToken(user._id);
 
       // Send verification email

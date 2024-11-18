@@ -6,7 +6,14 @@ import axios from 'axios';
 import { setCredentials } from '../../states/slices/authSlice';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
-import { FaFlag, FaLock, FaUser, FaEnvelope } from 'react-icons/fa';
+import {
+  FaFlag,
+  FaLock,
+  FaUser,
+  FaEnvelope,
+  FaEye,
+  FaEyeSlash,
+} from 'react-icons/fa';
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +24,8 @@ function RegisterPage() {
     password: '',
     confirm_password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -76,6 +85,7 @@ function RegisterPage() {
         dispatch(setCredentials(response.data));
         navigate('/');
       } else {
+        navigate('/verify_email');
         alert('Please verify your email to complete registration.');
       }
     } catch (error) {
@@ -168,7 +178,7 @@ function RegisterPage() {
             <div className="relative mb-4 md:mb-10">
               <FaLock className="absolute top-1/2 transform -translate-y-1/2 left-2 text-[#d5212d4f]" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -176,12 +186,18 @@ function RegisterPage() {
                 required
                 className="pl-10 py-2 border border-gray-300 w-full rounded"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-1/2 transform -translate-y-1/2 right-2 text-[#d5212d4f] focus:outline-none"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
-
             <div className="relative mb-4 md:mb-10">
               <FaLock className="absolute top-1/2 transform -translate-y-1/2 left-2 text-[#d5212d4f]" />
               <input
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'}
                 name="confirm_password"
                 value={formData.confirm_password}
                 onChange={handleChange}
@@ -189,6 +205,13 @@ function RegisterPage() {
                 required
                 className="pl-10 py-2 border border-gray-300 w-full rounded"
               />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute top-1/2 transform -translate-y-1/2 right-2 text-[#d5212d4f] focus:outline-none"
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
 
             <button

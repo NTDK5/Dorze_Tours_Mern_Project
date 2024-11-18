@@ -22,6 +22,7 @@ import {
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom'; // Ensure 'useNavigate' is imported
 import footerImg from '../../assets/images/Footer_img.png';
+import LoadingScreen from '../../components/Loading';
 
 const LodgePage = () => {
   const [lodge, setLodge] = useState({});
@@ -125,7 +126,7 @@ const LodgePage = () => {
     }
   };
 
-  if (loading) return <div className="text-center">Loading...</div>;
+  if (loading) return <LoadingScreen />;
   if (error)
     return <div className="text-center text-red-500">Error: {error}</div>;
 
@@ -372,7 +373,7 @@ const LodgePage = () => {
                     </p>
                   </div>
                 </div>
-                <div className="w-full mt-8">
+                <div className="w-full h-[400px] lg:h-[500px] mt-8">
                   <MapComponent />
                 </div>
               </div>

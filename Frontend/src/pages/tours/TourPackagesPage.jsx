@@ -3,6 +3,7 @@ import { FaCar, FaClock, FaUsers, FaStar } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import { fetchTotalTours } from '../../services/tourApi';
 import { Link } from 'react-router-dom';
+import LoadingScreen from '../../components/Loading';
 
 const TourPackagesPage = () => {
   const [selectedDestinations, setSelectedDestinations] = useState(['All']);
@@ -72,6 +73,8 @@ const TourPackagesPage = () => {
     return stars;
   };
 
+  if (isLoading) return <LoadingScreen />;
+
   return (
     <section className="w-full flex items-center justify-center">
       <div className="flex flex-col lg:flex-row w-full lg:w-[70%]">
@@ -110,7 +113,7 @@ const TourPackagesPage = () => {
 
         <div className="w-full lg:w-2/3 p-4">
           <h2 className="font-bold text-2xl mb-4">Available Tours</h2>
-          {isLoading && <p>Loading tours...</p>}
+
           {isError && <p>Error fetching tours.</p>}
           <div className="w-full grid grid-cols-1 gap-4">
             {filterTours().map((tour) => (
