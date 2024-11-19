@@ -10,7 +10,7 @@ import {
   FaPhone,
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import footerImg from '../assets/images/Footer_img.png';
+import footerImg from '../assets/images/Footer_img.webp';
 
 const Footer = () => {
   return (
@@ -18,7 +18,14 @@ const Footer = () => {
       id="footer"
       className="footer mt-[100px] pt-[100px] flex justify-center bg-white w-full relative shadow-[0_-5px_15px_rgba(0,0,0,0.1)]"
     >
-      <img src={footerImg} className="absolute right-0 bottom-0" />
+      <img
+        src={footerImg}
+        className="absolute right-0 bottom-0"
+        width="300" // Replace with actual width
+        height="200" // Replace with actual height
+        alt="Footer Background"
+      />
+
       <div className="footer_content w-[90%] lg:w-[70%]">
         <div className="footer_row flex flex-wrap justify-between gap-10 lg:gap-0">
           {/* Footer Logo and Subscribe */}

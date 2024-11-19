@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import signInImage from '../../assets/image1.jpg';
+import signInImage from '../../assets/image2.webp';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';

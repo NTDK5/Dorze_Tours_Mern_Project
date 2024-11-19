@@ -15,9 +15,9 @@ import {
 } from 'react-icons/fa';
 import { destinationData } from '../../assets/data/destinationData';
 import { testimonials } from '../../assets/data/testimonialData.js';
-import ctaImage from '../../assets/images/Rectangle 158.png';
-import image3 from '../../assets/images/image 3.jpg';
-import lodgeImage from '../../assets/images/lodge.png';
+import ctaImage from '../../assets/images/Rectangle 158.webp';
+import image3 from '../../assets/images/image 3.webp';
+import lodgeImage from '../../assets/images/lodge.webp';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchTotalTours } from '../../services/tourApi';
 import TourCard from '../../components/TourCard';
@@ -266,9 +266,13 @@ function HomePage() {
                 <p>{testimonial.testimonial}</p>
                 <div className="testimonial_profile absolute flex gap-[30px] border-dotted border-t-[2px] border-[#ffae00] bottom-[10px] w-[90%] py-[20px] px-[10px]">
                   <img
-                    className="w-[50px] h-[50px] rounded-full "
+                    className="w-[50px] h-[50px] rounded-full"
                     src={testimonial.profileImg}
+                    alt={`${testimonial.name}'s profile`}
+                    width="50"
+                    height="50"
                   />
+
                   <div className="testimonial_info">
                     <h3>{testimonial.name}</h3>
                     <p>{testimonial.location}</p>
