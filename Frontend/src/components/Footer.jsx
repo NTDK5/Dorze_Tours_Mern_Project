@@ -16,13 +16,13 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="footer mt-[100px] pt-[100px] flex justify-center bg-white w-full relative shadow-[0_-5px_15px_rgba(0,0,0,0.1)]"
+      className="footer mt-[100px] pt-[100px] flex justify-center bg-white w-full h-max shadow-[0_-5px_15px_rgba(0,0,0,0.1)]"
     >
       <img
         src={footerImg}
         className="absolute right-0 bottom-0"
-        width="300" // Replace with actual width
-        height="200" // Replace with actual height
+        width="500"
+        height="200"
         alt="Footer Background"
       />
 
