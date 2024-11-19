@@ -168,29 +168,40 @@ const LodgePage = () => {
             </div>
           </div>
 
-          <div className="w-full flex flex-col md:flex-row gap-4 max-h-[50vh]">
-            <img
-              className="w-full md:w-[60%] h-auto rounded-md object-cover"
-              src={lodge?.images[0]}
-              alt={lodge.name}
-            />
-
-            <div className="lg:flex justify-between flex-wrap w-[40%] hidden ">
+          <div className="lg:flex gap-6  w-full">
+            <div className="lg:w-1/2 w-full mb-4 lg:mb-0">
               <img
-                className="w-[49%] h-[49%] rounded-md object-cover object-center"
-                src={lodge.images[1]}
-              />
-              <img
-                className="w-[49%] h-[49%] rounded-md object-cover object-center"
-                src={lodge.images[2]}
-              />
-              <img
-                className="w-[49%] h-[49%] rounded-md object-cover object-center"
+                className="rounded-md object-cover object-center w-full"
                 src={lodge.images[0]}
+                alt="Lodge Image 1"
+                style={{ height: 'auto', aspectRatio: '16/9' }}
+              />
+            </div>
+
+            <div className="w-full lg:w-1/2 grid grid-cols-2 gap-6">
+              <img
+                className="rounded-md object-cover object-center w-full"
+                src={lodge.images[1]}
+                alt="Lodge Image 2"
+                style={{ height: 'auto', aspectRatio: '16/9' }}
               />
               <img
-                className="w-[49%] h-[49%] rounded-md object-cover object-center"
+                className="rounded-md object-cover object-center w-full"
+                src={lodge.images[2]}
+                alt="Lodge Image 3"
+                style={{ height: 'auto', aspectRatio: '16/9' }}
+              />
+              <img
+                className="rounded-md object-cover object-center w-full"
+                src={lodge.images[0]}
+                alt="Lodge Image 4"
+                style={{ height: 'auto', aspectRatio: '16/9' }}
+              />
+              <img
+                className="rounded-md object-cover object-center w-full"
                 src={lodge.images[1]}
+                alt="Lodge Image 5"
+                style={{ height: 'auto', aspectRatio: '16/9' }}
               />
             </div>
           </div>
