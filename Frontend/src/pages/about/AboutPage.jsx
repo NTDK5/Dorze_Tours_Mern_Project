@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import gallery1 from '../../assets/images/gallery1.jpg';
-import gallery2 from '../../assets/images/gallery2.jpg';
-import gallery3 from '../../assets/images/gallerry3.jpg';
-import oldCar from '../../assets/images/old car.jpg';
-import recentCar from '../../assets/images/recent car.jpg';
+import gallery1 from '../../assets/images/gallery1.webp';
+import gallery2 from '../../assets/images/gallery2.webp';
+import gallery3 from '../../assets/images/gallerry3.webp';
+import oldCar from '../../assets/images/old car.webp';
+import recentCar from '../../assets/images/recent car.webp';
 import {
   FaMap,
   FaGlobe,
@@ -12,9 +12,9 @@ import {
   FaPrayingHands,
   FaGem,
 } from 'react-icons/fa';
-import ctaImage from '../../assets/images/Rectangle 158.png';
+import ctaImage from '../../assets/images/Rectangle 158.webp';
 import { Link } from 'react-router-dom';
-import lodgeImage from '../../assets/images/lodge.png';
+import lodgeImage from '../../assets/images/lodge.webp';
 
 const AboutPage = () => {
   useEffect(() => {

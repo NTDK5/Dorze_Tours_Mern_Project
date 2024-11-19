@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaLock, FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
-import signInImage from '../../assets/image1.jpg';
+import signInImage from '../../assets/image2.webp';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCredentials } from '../../states/slices/authSlice';

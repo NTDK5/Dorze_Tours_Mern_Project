@@ -21,7 +21,7 @@ import {
   FaPhone,
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom'; // Ensure 'useNavigate' is imported
-import footerImg from '../../assets/images/Footer_img.png';
+import footerImg from '../../assets/images/Footer_img.webp';
 import LoadingScreen from '../../components/Loading';
 
 const LodgePage = () => {

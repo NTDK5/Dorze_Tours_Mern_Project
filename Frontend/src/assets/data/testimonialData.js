@@ -1,9 +1,9 @@
-import avatar1 from '../images/avatar-1.jpg';
-import avatar2 from '../images/avatar-2.jpg';
-import avatar3 from '../images/avatar-3.jpg';
-import avatar4 from '../images/avatar-4.jpg';
-import avatar5 from '../images/avatar-5.jpg';
-import avatar6 from '../images/avatar-6.jpg';
+import avatar1 from '../images/avatar-1.webp';
+import avatar2 from '../images/avatar-2.webp';
+import avatar3 from '../images/avatar-3.webp';
+import avatar4 from '../images/avatar-4.webp';
+import avatar5 from '../images/avatar-5.webp';
+import avatar6 from '../images/avatar-6.webp';
 
 export const testimonials = [
   {
