@@ -26,6 +26,7 @@ const TourCard = ({ tour }) => {
         className="w-full h-[200px] lg:h-[300px]  object-cover object-center"
         src={`${process.env.REACT_APP_API_URL}/${tour.imageUrl[0].replace(/\\/g, '/')}`}
         alt={tour.title}
+        loading="lazy"
       />
 
       <div className="px-4 w-full mt-4">
