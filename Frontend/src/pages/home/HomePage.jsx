@@ -161,6 +161,7 @@ function HomePage() {
             className="w-full h-[300px] md:h-[400px] lg:h-[600px] object-cover object-center"
             src={filteredDestination.image}
             alt={filteredDestination.name}
+            loading="lazy"
           />
           <div className="w-[95%] md:w-[90%] bg-[#F9FDFF] flex flex-col gap-4 lg:gap-0 md:flex-row mt-6 py-16 px-4 md:px-6 transform translate-y-[-20%] md:translate-y-[-40%] shadow-lg">
             <div className="w-full md:w-[60%]">
