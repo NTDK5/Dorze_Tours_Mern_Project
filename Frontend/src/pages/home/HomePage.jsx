@@ -15,9 +15,6 @@ import {
 } from 'react-icons/fa';
 import { destinationData } from '../../assets/data/destinationData';
 import { testimonials } from '../../assets/data/testimonialData.js';
-import ctaImage from '../../assets/images/Rectangle 158.webp';
-import image3 from '../../assets/images/image 3.webp';
-import lodgeImage from '../../assets/images/lodge.webp';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchTotalTours } from '../../services/tourApi';
 import TourCard from '../../components/TourCard';
@@ -25,7 +22,6 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import LoadingScreen from '../../components/Loading.jsx';
-
 function HomePage() {
   useEffect(() => {
     document.title = 'Dorze Tours - Home ';
@@ -209,24 +205,27 @@ function HomePage() {
       <section className="w-full h-max relative my-[100px]">
         <img
           className="object-cover object-center w-full h-[70vh] md:h-[70vh] lg:h-[80vh] z-10"
-          src={ctaImage}
+          src="/assets/images/Rectangle 158.webp"
           alt="Background"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-[#48057D] to-[#2ADDE7] opacity-80 backdrop-blur-[25px] z-20"></div>
 
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row items-center gap-[80px] justify-center">
+          <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row items-center gap-[40px] md:gap-[80px] justify-center">
             <img
-              className="hidden lg:block w-[20%] md:w-[10%] lg:w-[30%] object-center z-30 rounded-lg shadow-lg"
-              src={image3}
+              className="hidden lg:block w-[25%] md:w-[15%] lg:w-[30%] object-center z-30 rounded-lg shadow-lg"
+              src="/assets/images/image 3.webp"
               alt="Guide"
             />
             <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-center lg:items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
               <img
-                className="w-[40%] md:w-[50%] lg:hidden lg:w-[60%] object-center  z-30 rounded-lg shadow-lg"
-                src={image3}
+                className="w-[50%] md:w-[60%] lg:hidden lg:w-[40%] object-center z-30 rounded-lg shadow-lg"
+                src="/assets/images/image 3.webp"
                 alt="Guide"
+                width="400" // Replace with actual width
+                height="300" // Replace with actual height
               />
+
               <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl tracking-wide mb-4">
                 EXPERT GUIDES
               </h1>
@@ -286,22 +285,24 @@ function HomePage() {
       <section className="w-full h-max relative my-[100px]">
         <img
           className="object-cover object-center w-full h-[70vh] md:h-[70vh] lg:h-[80vh] z-10"
-          src={ctaImage}
+          src="/assets/images/Rectangle 158.webp"
           alt="Background"
         />
         <div className="absolute w-full top-0 left-0 h-full bg-gradient-to-br from-[#48057D] to-[#2ADDE7] z-20 opacity-[80%] backdrop-blur-[25px]"></div>
         <div className="absolute w-full top-0 h-full flex items-center justify-center">
           <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row lg:gap-8 items-center justify-between">
             <img
-              className="hidden lg:block w-[60%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
-              src={lodgeImage}
+              className="hidden lg:block w-[60%] md:w-[40%] lg:w-[50%] object-cover object-center z-30"
+              src="/assets/images/lodge.webp"
               alt="Guide"
+              width="600" // Replace with actual width
+              height="400" // Replace with actual height
             />
 
             <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
               <img
-                className="lg:hidden w-[60%] md:w-[40%] lg:w-[50%] object-center z-30 bg-cover bg-center"
-                src={lodgeImage}
+                className="lg:hidden w-[60%] md:w-[40%] lg:w-[50%] object-cover object-center z-30"
+                src="/assets/images/lodge.webp"
                 alt="Guide"
               />
               <h1 className="font-bold text-4xl md:text-5xl lg:text-5xl tracking-wide mb-4">
