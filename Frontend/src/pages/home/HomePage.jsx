@@ -161,7 +161,6 @@ function HomePage() {
             className="w-full h-[300px] md:h-[400px] lg:h-[600px] object-cover object-center"
             src={filteredDestination.image}
             alt={filteredDestination.name}
-            loading="lazy"
           />
           <div className="w-[95%] md:w-[90%] bg-[#F9FDFF] flex flex-col gap-4 lg:gap-0 md:flex-row mt-6 py-16 px-4 md:px-6 transform translate-y-[-20%] md:translate-y-[-40%] shadow-lg">
             <div className="w-full md:w-[60%]">
@@ -208,7 +207,6 @@ function HomePage() {
           className="object-cover object-center w-full h-[70vh] md:h-[70vh] lg:h-[80vh] z-10"
           src="/assets/images/Rectangle 158.webp"
           alt="Background"
-          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-[#48057D] to-[#2ADDE7] opacity-80 backdrop-blur-[25px] z-20"></div>
 
@@ -218,7 +216,6 @@ function HomePage() {
               className="hidden lg:block w-[25%] md:w-[15%] lg:w-[30%] object-center z-30 rounded-lg shadow-lg"
               src="/assets/images/image 3.webp"
               alt="Guide"
-              loading="lazy"
             />
             <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-center lg:items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
               <img
@@ -226,8 +223,7 @@ function HomePage() {
                 src="/assets/images/image 3.webp"
                 alt="Guide"
                 width="400" // Replace with actual width
-                height="300"
-                loading="lazy" // Replace with actual height
+                height="300" // Replace with actual height
               />
 
               <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl tracking-wide mb-4">
@@ -274,7 +270,6 @@ function HomePage() {
                     alt={`${testimonial.name}'s profile`}
                     width="50"
                     height="50"
-                    loading="lazy"
                   />
 
                   <div className="testimonial_info">
@@ -292,7 +287,6 @@ function HomePage() {
           className="object-cover object-center w-full h-[70vh] md:h-[70vh] lg:h-[80vh] z-10"
           src="/assets/images/Rectangle 158.webp"
           alt="Background"
-          loading="lazy"
         />
         <div className="absolute w-full top-0 left-0 h-full bg-gradient-to-br from-[#48057D] to-[#2ADDE7] z-20 opacity-[80%] backdrop-blur-[25px]"></div>
         <div className="absolute w-full top-0 h-full flex items-center justify-center">
@@ -303,7 +297,6 @@ function HomePage() {
               alt="Guide"
               width="600" // Replace with actual width
               height="400" // Replace with actual height
-              loading="lazy"
             />
 
             <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
@@ -311,7 +304,6 @@ function HomePage() {
                 className="lg:hidden w-[60%] md:w-[40%] lg:w-[50%] object-cover object-center z-30"
                 src="/assets/images/lodge.webp"
                 alt="Guide"
-                loading="lazy"
               />
               <h1 className="font-bold text-4xl md:text-5xl lg:text-5xl tracking-wide mb-4">
                 Experience the Heart of Ethiopia at Dorze Lodge
