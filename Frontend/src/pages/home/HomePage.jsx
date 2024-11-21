@@ -54,7 +54,7 @@ function HomePage() {
         <div className="absolute inset-0 hero-gradient"></div>
         <div className="w-full flex items-center justify-center relative h-full">
           <div className=" flex flex-col items-center justify-center lg:w-[90%]   text-center text-white px-4">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold">
+            <h1 className="text-4xl sm:text-4xl md:text-4xl lg:text-5xl font-bold">
               Explore the Timeless Beauty of Ethiopia
             </h1>
             <p className="mt-4 text-base lg:text-center text-sm w-[80%] md:text-xl lg:w-[60%]">
