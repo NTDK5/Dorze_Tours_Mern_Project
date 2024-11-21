@@ -204,7 +204,7 @@ function HomePage() {
       </section>
       <section className="w-full h-max relative my-[100px]">
         <img
-          className="object-cover object-center w-full h-[70vh] md:h-[70vh] lg:h-[80vh] z-10"
+          className="object-cover object-center w-full h-[80vh] md:h-[70vh] lg:h-[90vh] z-10"
           src="/assets/images/Rectangle 158.webp"
           alt="Background"
         />
@@ -230,12 +230,25 @@ function HomePage() {
                 EXPERT GUIDES
               </h1>
               <p className="text-sm md:text-base mb-6">
-                Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-                amet sint. Velit officia consequat duis enim velit mollit.
-                Exercitation veniam consequat sunt nostrud amet. Amet minim
-                mollit non deserunt ullamco est sit aliqua dolor do amet sint.
-                Velit officia consequat duis enim velit mollit. Exercitation
-                veniam consequat sunt nostrud amet.
+                At the heart of every unforgettable journey lies a great guide,
+                and that’s exactly what we provide. Our expert guides are
+                seasoned professionals who bring destinations to life through
+                their deep knowledge, passion, and storytelling skills. With
+                years of experience, they not only navigate you through the most
+                iconic landmarks but also uncover hidden treasures, local
+                secrets, and off-the-beaten-path wonders that make your travel
+                experience truly unique.
+              </p>
+              <p className="hidden lg:block text-sm md:text-base mb-6">
+                They don’t just lead tours; they forge connections between you
+                and the destination. By blending cultural insights, fascinating
+                anecdotes, and practical tips, our guides turn every journey
+                into a story worth telling. Above all, your safety and
+                satisfaction are their top priorities, ensuring that every
+                moment of your adventure is enjoyable, memorable, and
+                worry-free.With our expert guides by your side, travel becomes
+                more than just sightseeing—it transforms into an extraordinary
+                exploration filled with meaningful moments and lasting memories.
               </p>
               <Link
                 to="/our_packages"

@@ -178,7 +178,7 @@ const LodgePage = () => {
               />
             </div>
 
-            <div className="w-full lg:w-1/2 grid grid-cols-2 gap-6">
+            <div className="w-full lg:w-1/2 lg:grid grid-cols-2 gap-6 hidden">
               <img
                 className="rounded-md object-cover object-center w-full"
                 src={lodge.images[1]}
