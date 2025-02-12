@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
-import { FaUserFriends } from 'react-icons/fa';
+import { FaUserFriends, FaRoute, FaBookmark, FaCreditCard, FaStar, FaCar } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import { fetchTotalUsers } from '../../services/userApi';
 import { fetchTotalTours } from '../../services/tourApi';
@@ -12,6 +12,7 @@ import {
 } from '../../services/bookingApi';
 import { fetchTotalPayments } from '../../services/paymentApi';
 import { fetchTotalReviews } from '../../services/reviewsApi';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function AdminDashboard() {
   const {
@@ -61,65 +62,110 @@ function AdminDashboard() {
   const totalPayments = totalPaymentsData?.length;
   const TotalReviews = totalReviewsData?.totalReviews;
   console.log(totalPaymentsData);
-  if (isUsersLoading || isToursLoading) {
-    return <div>Loading...</div>;
-  }
 
-  if (isUsersError || isToursError) {
-    return <div>Error loading data</div>;
+  const statsCards = [
+    {
+      title: 'Total Users',
+      value: totalUsersData?.count || 0,
+      icon: <FaUserFriends />,
+      color: 'bg-blue-500',
+    },
+    {
+      title: 'Total Tours',
+      value: totalToursData?.length || 0,
+      icon: <FaRoute />,
+      color: 'bg-green-500',
+    },
+    {
+      title: 'Total Bookings',
+      value: totalBookingsData?.length || 0,
+      icon: <FaBookmark />,
+      color: 'bg-purple-500',
+    },
+    {
+      title: 'Total Payments',
+      value: totalPaymentsData?.length || 0,
+      icon: <FaCreditCard />,
+      color: 'bg-yellow-500',
+    },
+    {
+      title: 'Total Reviews',
+      value: totalReviewsData?.totalReviews || 0,
+      icon: <FaStar />,
+      color: 'bg-red-500',
+    },
+  ];
+
+  if (isUsersLoading || isToursLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   return (
-    <section className="full flex flex-col text-white font-bold">
-      <h1 className="text-4xl">Dashboard</h1>
-      <div className="mt-[50px] flex w-full justify-between">
-        <div className="w-[250px] rounded-[14px] bg-[#273142] h-[150px] py-2 px-4">
-          <h3 className="text-gray-300">Total Users</h3>
-          <div className="flex justify-between w-full">
-            <h1 className="mt-[20px] text-3xl font-bold">{totalUsers}</h1>
-            <div className="w-[60px] h-[60px] flex items-center justify-center bg-[#8280FF] rounded-[40%]">
-              <FaUserFriends className="text-3xl" />
+    <div className="p-6 bg-gray-900 min-h-screen">
+      <h1 className="text-4xl font-bold text-white mb-8">Dashboard Overview</h1>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+        {statsCards.map((stat, index) => (
+          <div key={index} className="bg-gray-800 rounded-lg p-6 transform hover:scale-105 transition-transform duration-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">{stat.title}</p>
+                <h3 className="text-2xl font-bold text-white mt-2">{stat.value}</h3>
+              </div>
+              <div className={`${stat.color} p-3 rounded-lg text-white text-xl`}>
+                {stat.icon}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="w-[250px] rounded-[14px] bg-[#273142] h-[150px] py-2 px-4">
-          <h3 className="text-gray-300">Total Tours</h3>
-          <div className="flex justify-between w-full">
-            <h1 className="mt-[20px] text-3xl font-bold">{totalTours}</h1>
-            <div className="w-[60px] h-[60px] flex items-center justify-center bg-[#8280FF] rounded-[40%]">
-              <FaUserFriends className="text-3xl" />
-            </div>
+        ))}
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="bg-gray-800 rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">Booking Trends</h2>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={totalBookingsData || []}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis dataKey="bookingDate" stroke="#9CA3AF" />
+                <YAxis stroke="#9CA3AF" />
+                <Tooltip />
+                <Line type="monotone" dataKey="totalPrice" stroke="#3B82F6" />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
-        <div className="w-[250px] rounded-[14px] bg-[#273142] h-[150px] py-2 px-4">
-          <h3 className="text-gray-300">Total Bookings</h3>
-          <div className="flex justify-between w-full">
-            <h1 className="mt-[20px] text-3xl font-bold">{totalBookings}</h1>
-            <div className="w-[60px] h-[60px] flex items-center justify-center bg-[#8280FF] rounded-[40%]">
-              <FaUserFriends className="text-3xl" />
-            </div>
-          </div>
-        </div>
-        <div className="w-[250px] rounded-[14px] bg-[#273142] h-[150px] py-2 px-4">
-          <h3 className="text-gray-300">Total Paymets</h3>
-          <div className="flex justify-between w-full">
-            <h1 className="mt-[20px] text-3xl font-bold">{totalPayments}</h1>
-            <div className="w-[60px] h-[60px] flex items-center justify-center bg-[#8280FF] rounded-[40%]">
-              <FaUserFriends className="text-3xl" />
-            </div>
-          </div>
-        </div>
-        <div className="w-[250px] rounded-[14px] bg-[#273142] h-[150px] py-2 px-4">
-          <h3 className="text-gray-300">Total Reviews</h3>
-          <div className="flex justify-between w-full">
-            <h1 className="mt-[20px] text-3xl font-bold">{TotalReviews}</h1>
-            <div className="w-[60px] h-[60px] flex items-center justify-center bg-[#8280FF] rounded-[40%]">
-              <FaUserFriends className="text-3xl" />
-            </div>
+
+        {/* Recent Activity Section */}
+        <div className="bg-gray-800 rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">Recent Activity</h2>
+          <div className="space-y-4">
+            {(totalBookingsData || []).slice(0, 5).map((booking, index) => (
+              <div key={index} className="flex items-center justify-between bg-gray-700 p-4 rounded-lg">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-blue-500 p-2 rounded-lg">
+                    <FaBookmark className="text-white" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">New Booking</p>
+                    <p className="text-gray-400 text-sm">
+                      {new Date(booking.bookingDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-white font-bold">${booking.totalPrice}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 

@@ -15,7 +15,7 @@ function Admin() {
   }, [navigate, userInfo]);
 
   return (
-    <div className="admin-dashboard flex w-full justify-between min-h-screen bg-[#1B2431]">
+    <div className="admin-dashboard flex w-full justify-between min-h-screen bg-gray-900">
       <SideBarMenu />
       <div className="main-content flex w-[90%] min-h-full items-start justify-center py-[100px]">
         <div className="w-[90%] ">

@@ -1,62 +1,71 @@
 // components/TourCard.js
 /* eslint-disable react/prop-types */
+/* eslint-disable react/no-unescaped-entities */
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaClock, FaCar, FaUserFriends, FaStar } from 'react-icons/fa';
+import { FaClock, FaUserFriends, FaStar } from 'react-icons/fa';
 
 const TourCard = ({ tour }) => {
   const renderStars = (averageRating) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
-      if (i < Math.floor(averageRating)) {
-        stars.push(<FaStar key={i} className="text-yellow-500 text-sm" />);
-      } else if (i < averageRating) {
-        stars.push(<FaStar key={i} className="text-yellow-500 text-sm" />);
-      } else {
-        stars.push(<FaStar key={i} className="text-gray-300 text-sm" />);
-      }
+      stars.push(
+        <FaStar
+          key={i}
+          className={`text-sm ${i < averageRating ? 'text-[#F29404]' : 'text-gray-300'}`}
+        />
+      );
     }
     return stars;
   };
 
   return (
-    <Link to={`/tour/${tour._id}`} className="bg-white shadow-lg rounded-lg">
-      <img
-        className="w-full h-[200px] lg:h-[300px]  object-cover object-center"
-        src={`${process.env.REACT_APP_API_URL}/${tour.imageUrl[0].replace(/\\/g, '/')}`}
-        alt={tour.title}
-        loading="lazy"
-      />
+    <Link
+      to={`/tour/${tour._id}`}
+      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all overflow-hidden"
+    >
+      <div className="relative">
+        <img
+          className="w-full h-[200px] lg:h-[300px] object-cover"
+          src={`${process.env.REACT_APP_API_URL}/${tour.imageUrl[0].replace(/\\/g, '/')}`}
+          alt={tour.title}
+          loading="lazy"
+        />
+        <div className="absolute top-4 right-4 bg-[#FFDA32]/90 px-3 py-1 rounded-full text-sm font-semibold">
+          {tour.duration}
+        </div>
+      </div>
 
-      <div className="px-4 w-full mt-4">
-        <h3 className="text-xl font-bold">{tour.title}</h3>
-        <div className="flex mt-2 w-full items-center gap-1">
-          <FaClock className="text-gray-700 p-0" />
-          <p className="text-center text-gray-700">Duration {tour.duration}</p>
+      <div className="p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-bold text-gray-800">{tour.title}</h3>
+          <span className="flex items-center gap-1">
+            {renderStars(tour.averageRating)}
+          </span>
         </div>
-        <div className="flex mt-2 w-full items-center gap-1">
-          <FaCar className="text-gray-700 p-0" />
-          <p className="text-center text-gray-700">Private Transport</p>
-        </div>
-        <div className="flex mt-2 w-full items-center gap-1">
-          <FaUserFriends className="text-gray-700 p-0" />
-          <p className="text-center text-gray-700">Family Plan</p>
-        </div>
-        <div className="w-full border-t-2 py-2 border-gray-50 flex items-end justify-between">
-          <div className="flex flex-col items-center">
-            <div className="flex">
-              {renderStars(tour.averageRating)}{' '}
-              {/* Render dynamic stars based on averageRating */}
-            </div>
-            <p>{tour.totalRatings} reviews</p> {/* Show total reviews */}
+
+        <div className="flex items-center gap-4 text-gray-600">
+          <div className="flex items-center gap-2">
+            <FaClock className="text-[#F29404]" />
+            <span>{tour.duration}</span>
           </div>
-          <div>
-            <h2 className="font-semibold lg:text-2xl text-lg text-[#F29404]">
-              ${tour.price}.00
-            </h2>
-            <p>Per Person</p>
+          <div className="flex items-center gap-2">
+            <FaUserFriends className="text-[#F29404]" />
+            <span>{tour.maxGroupSize}</span>
           </div>
+        </div>
+
+        <p className="text-gray-600 line-clamp-3">{tour.description}</p>
+
+        <div className="flex items-center justify-between pt-4">
+          <span className="text-2xl font-bold text-[#F29404]">
+            ${tour.price}
+            <span className="text-sm text-gray-500"> / person</span>
+          </span>
+          <button className="bg-[#F29404] text-white px-6 py-2 rounded-lg hover:bg-[#DB8303] transition-colors">
+            View Tour
+          </button>
         </div>
       </div>
     </Link>

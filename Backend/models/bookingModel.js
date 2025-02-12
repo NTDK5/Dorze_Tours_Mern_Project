@@ -21,7 +21,7 @@ const bookingSchema = mongoose.Schema(
     },
     bookingType: {
       type: String,
-      enum: ["Tour", "Lodge"], // Type of booking: Tour or Lodge
+      enum: ["Tour", "Lodge", "Car"],
       required: true,
     },
     bookingDate: {
@@ -71,17 +71,33 @@ const bookingSchema = mongoose.Schema(
         return this.bookingType === "Lodge"; // Only required for Lodge bookings
       },
     },
+    car: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Car",
+    },
+    pickupLocation: {
+      type: String,
+      required: function () {
+        return this.bookingType === "Car";
+      }
+    },
+    dropoffLocation: {
+      type: String,
+      required: function () {
+        return this.bookingType === "Car";
+      }
+    }
   },
   {
     timestamps: true, // Automatically create `createdAt` and `updatedAt` fields
   }
 );
 
-// Adding a validation to ensure either tour or lodge is booked
+// Update the validation to include car bookings
 bookingSchema.pre("save", function (next) {
-  if (!this.tour && !this.lodge) {
+  if (!this.tour && !this.lodge && !this.car) {
     throw new Error(
-      "A booking must be associated with either a tour or a lodge."
+      "A booking must be associated with either a tour, lodge, or car."
     );
   }
   next();

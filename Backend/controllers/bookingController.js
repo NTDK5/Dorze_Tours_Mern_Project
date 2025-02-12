@@ -6,6 +6,7 @@ const User = require("../models/userModel.js");
 const cron = require("node-cron");
 const paypal = require("@paypal/checkout-server-sdk");
 const { client } = require("../utils/paypalClient");
+const Car = require("../models/carModel.js");
 
 // @desc Create a new booking
 // @route POST /api/bookings
@@ -15,39 +16,50 @@ const createBooking = asyncHandler(async (req, res) => {
     bookingType,
     tourId,
     lodgeId,
-    numberOfPeople,
+    carId,
+    numberOfPeople = 1,
     paymentMethod,
     notes,
     checkInDate,
     checkOutDate,
     roomType,
-    bookingDate,
+    pickupLocation,
+    dropoffLocation,
+    bookingDate
   } = req.body;
-  const userId = req.user._id; // Assuming the user is authenticated and `req.user` is available
 
+  const userId = req.user._id;
   let totalPrice = 0;
-  let bookingDetails;
+  let bookingDetails = {};
 
+  // Validate booking type
+  if (!["Tour", "Lodge", "Car"].includes(bookingType)) {
+    res.status(400);
+    throw new Error("Invalid booking type");
+  }
+
+  // Handle Tour booking
   if (bookingType === "Tour") {
-    // Validate the tour
     const tour = await Tour.findById(tourId);
     if (!tour) {
       res.status(404);
       throw new Error("Tour not found");
     }
-
-    // Calculate total price for the tour
     totalPrice = tour.price * numberOfPeople;
-    bookingDetails = { tour: tourId };
-  } else if (bookingType === "Lodge") {
-    // Validate the lodge
+    bookingDetails = {
+      tour: tourId,
+      bookingDate: bookingDate || new Date()
+    };
+  }
+
+  // Handle Lodge booking
+  else if (bookingType === "Lodge") {
     const lodge = await Lodge.findById(lodgeId);
     if (!lodge) {
       res.status(404);
       throw new Error("Lodge not found");
     }
 
-    // Find the selected room type
     const selectedRoomType = lodge.roomTypes.find(
       (room) => room.type === roomType
     );
@@ -56,17 +68,62 @@ const createBooking = asyncHandler(async (req, res) => {
       throw new Error("Invalid room type selected");
     }
 
-    console.log(selectedRoomType);
-    // Calculate total price for the lodge (assuming lodge.price is per room/night)
     const numberOfNights = Math.ceil(
       (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24)
     );
+
     totalPrice = selectedRoomType.price * numberOfNights;
-    console.log(totalPrice);
-    bookingDetails = { lodge: lodgeId, checkInDate, checkOutDate, roomType }; // Include check-in/out and room type
-  } else {
-    res.status(400);
-    throw new Error("Invalid booking type");
+    bookingDetails = {
+      lodge: lodgeId,
+      checkInDate,
+      checkOutDate,
+      roomType
+    };
+  }
+
+  // Handle Car booking
+  else if (bookingType === "Car") {
+    const car = await Car.findById(carId);
+    if (!car) {
+      res.status(404);
+      throw new Error("Car not found");
+    }
+    if (!car.available) {
+      res.status(400);
+      throw new Error("Car is not available for booking");
+    }
+
+    if (!pickupLocation || !dropoffLocation) {
+      res.status(400);
+      throw new Error("Pickup and dropoff locations are required for car bookings");
+    }
+
+    if (!checkInDate || !checkOutDate) {
+      res.status(400);
+      throw new Error("Check-in and check-out dates are required for car bookings");
+    }
+
+    const numberOfDays = Math.ceil(
+      (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24)
+    );
+
+    if (numberOfDays <= 0) {
+      res.status(400);
+      throw new Error("Invalid booking duration");
+    }
+
+    totalPrice = car.pricePerDay * numberOfDays;
+    bookingDetails = {
+      car: carId,
+      checkInDate,
+      checkOutDate,
+      pickupLocation,
+      dropoffLocation
+    };
+
+    // Update car availability
+    // car.available = false;
+    await car.save();
   }
 
   // Create the booking
@@ -75,11 +132,20 @@ const createBooking = asyncHandler(async (req, res) => {
     bookingType,
     numberOfPeople,
     totalPrice,
-    paymentMethod,
+    paymentMethod: paymentMethod || 'credit card',
     notes,
-    ...bookingDetails,
-    bookingDate,
+    status: 'pending',
+    ...bookingDetails
   });
+
+  // Populate relevant details based on booking type
+  await booking.populate({
+    path: bookingType.toLowerCase(),
+    select: bookingType === 'Tour' ? 'title destination price' :
+      bookingType === 'Lodge' ? 'name location roomTypes' :
+        'brand model year transmission fuelType seats pricePerDay'
+  });
+
 
   res.status(201).json(booking);
 });
@@ -91,7 +157,8 @@ const getAllBookings = asyncHandler(async (req, res) => {
   const bookings = await Booking.find()
     .populate("user", "first_name last_name email")
     .populate("tour", "title destination")
-    .populate("lodge", "name location");
+    .populate("lodge", "name location")
+    .populate("car", "brand model year transmission fuelType seats pricePerDay");
   res.status(200).json(bookings);
 });
 
@@ -102,7 +169,8 @@ const getBookingById = asyncHandler(async (req, res) => {
   const booking = await Booking.findById(req.params.id)
     .populate("user", "first_name last_name email")
     .populate("tour", "title destination")
-    .populate("lodge", "name location");
+    .populate("lodge", "name location")
+    .populate("car", "brand model year transmission fuelType seats pricePerDay");
 
   if (booking) {
     res.status(200).json(booking);

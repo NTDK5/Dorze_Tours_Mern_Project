@@ -1,42 +1,31 @@
 const mongoose = require("mongoose");
 
-const paymentSchema = new mongoose.Schema({
-  booking: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Booking",
-    required: true,
+const paymentSchema = new mongoose.Schema(
+  {
+    amount: {
+      type: Number,
+      required: true,
+    },
+    booking: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
+      required: true,
+    },
+    txRef: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "completed", "failed"],
+      default: "pending",
+    },
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  amount: {
-    type: Number,
-    required: true,
-  },
-  paymentMethod: {
-    type: String,
-    required: true,
-    enum: ["paypal", "stripe"], // Add more payment methods as needed
-  },
-  paymentStatus: {
-    type: String,
-    required: true,
-    enum: ["pending", "completed", "failed"],
-    default: "pending",
-  },
-  transactionId: {
-    type: String,
-    required: true,
-  },
-  // Add this to identify the type of booking
-  bookingType: {
-    type: String,
-    enum: ["tour", "lodge"],
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const Payment = mongoose.model("Payment", paymentSchema);
 

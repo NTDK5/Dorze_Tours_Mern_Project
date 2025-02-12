@@ -65,14 +65,12 @@ const getTourById = asyncHandler(async (req, res) => {
     throw new Error("Tour not found");
   }
 });
-
 // @desc Update a tour
 // @route PUT /api/tours/:id
 // @access Private
 const updateTour = asyncHandler(async (req, res) => {
-  const { title, description, destination, price, duration, itinerary } =
-    req.body;
-  const imageUrl = req.file ? req.file.path : ""; // Get the path to the uploaded image
+  const { title, description, destination, price, duration, itinerary } = req.body;
+  const imageUrl = req.file ? req.file.path : null;
 
   const tour = await Tour.findById(req.params.id);
 
@@ -82,8 +80,16 @@ const updateTour = asyncHandler(async (req, res) => {
     tour.destination = destination || tour.destination;
     tour.price = price || tour.price;
     tour.duration = duration || tour.duration;
-    tour.imageUrl = imageUrl || tour.imageUrl; // Update image URL if a new file is uploaded
-    tour.itinerary = itinerary || tour.itinerary;
+
+    // Update image URL if a new file is uploaded
+    if (imageUrl) {
+      tour.imageUrl = imageUrl;
+    }
+
+    // Ensure itinerary is updated correctly
+    if (itinerary) {
+      tour.itinerary = typeof itinerary === 'string' ? JSON.parse(itinerary) : itinerary;
+    }
 
     const updatedTour = await tour.save();
 
@@ -94,7 +100,7 @@ const updateTour = asyncHandler(async (req, res) => {
       destination: updatedTour.destination,
       price: updatedTour.price,
       duration: updatedTour.duration,
-      imageUrl: updatedTour.imageUrl, // Include image URL in response
+      imageUrl: updatedTour.imageUrl,
       itinerary: updatedTour.itinerary,
     });
   } else {
@@ -102,6 +108,7 @@ const updateTour = asyncHandler(async (req, res) => {
     throw new Error("Tour not found");
   }
 });
+
 
 // @desc Delete a tour
 // @route DELETE /api/tours/:id

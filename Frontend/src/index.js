@@ -31,7 +31,7 @@ import UserProfilePage from './pages/users/UserProfilePage';
 import Profile from './pages/users/Profile';
 import UserBookings from './pages/booking/UserBooking';
 import RegisterPage from './pages/auth/RegisterPage';
-import EmailVerification from './components/EmailVerification';
+import GoogleAuthHandler from './pages/googleAuthHandler';
 import Checkout from './pages/payment/CheckoutPage';
 import PaymentSuccess from './pages/payment/SucessPage';
 import GalleryPage from './pages/gallery/GalleryPage';
@@ -39,7 +39,9 @@ import LodgePage from './pages/lodge/LodgePage';
 import AdminPaymentPage from './pages/payment/AdminPaymentPage';
 import VerifyEmailPage from './pages/EmailVerify';
 import ErrorBoundary from './ErrorBoundary';
+import CarRentalPage from './pages/cars/CarRentalPage';
 const queryClient = new QueryClient();
+import AdminCarsPage from './pages/admin/AdminCarsPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,6 +49,8 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/cars" element={<CarRentalPage />} />
+      {/* <Route path="/cars/:id" element={<CarDetailsPage />} /> */}
       <Route path="/tour/:id" element={<TourDetails />} />
       <Route path="/about_us" element={<AboutPage />} />
       <Route path="/gallery" element={<GalleryPage />} />
@@ -54,6 +58,7 @@ const router = createBrowserRouter(
       <Route path="/our_packages" element={<TourPackagesPage />} />
       <Route path="/verify_email" element={<VerifyEmailPage />} />
       <Route path="/profile" element={<UserProfilePage />} />
+      <Route path="/auth-success" element={<GoogleAuthHandler />} />
       <Route path="profile" element={<UserProfilePage />}>
         <Route index={true} element={<Profile />} />
         <Route path="booking_history" element={<UserBookings />} />
@@ -68,6 +73,7 @@ const router = createBrowserRouter(
         <Route path="create_tour" element={<CreateTourForm />} />
         <Route path="bookings" element={<AdminBookingPage />} />
         <Route path="payments" element={<AdminPaymentPage />} />
+        <Route path="cars" element={<AdminCarsPage />} />
       </Route>
     </Route>
   )

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
 
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
@@ -142,11 +143,10 @@ function HomePage() {
           {destinationData?.map((destination, index) => (
             <button
               key={index}
-              className={`border-2 rounded-full lg:px-6 px-4 py-2 text-sm md:text-base ${
-                filter === destination.name
-                  ? 'bg-[#F29404] text-white border-[#F29404]'
-                  : 'bg-white text-gray-800 border-gray-600'
-              }`}
+              className={`border-2 rounded-full lg:px-6 px-4 py-2 text-sm md:text-base ${filter === destination.name
+                ? 'bg-[#F29404] text-white border-[#F29404]'
+                : 'bg-white text-gray-800 border-gray-600'
+                }`}
               onClick={() => setFilter(destination.name)}
             >
               {destination.name}
@@ -202,144 +202,197 @@ function HomePage() {
           )}
         </div>
       </section>
-      <section className="w-full h-max relative my-[100px]">
-        <img
-          className="object-cover object-center w-full h-[80vh] md:h-[70vh] lg:h-[90vh] z-10"
-          src="/assets/images/Rectangle 158.webp"
-          alt="Background"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#48057D] to-[#2ADDE7] opacity-80 backdrop-blur-[25px] z-20"></div>
 
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row items-center gap-[40px] md:gap-[80px] justify-center">
-            <img
-              className="hidden lg:block w-[25%] md:w-[15%] lg:w-[30%] object-center z-30 rounded-lg shadow-lg"
-              src="/assets/images/image 3.webp"
-              alt="Guide"
-            />
-            <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-center lg:items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
-              <img
-                className="w-[50%] md:w-[60%] lg:hidden lg:w-[40%] object-center z-30 rounded-lg shadow-lg"
-                src="/assets/images/image 3.webp"
-                alt="Guide"
-                width="400" // Replace with actual width
-                height="300" // Replace with actual height
-              />
-
-              <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl tracking-wide mb-4">
-                EXPERT GUIDES
-              </h1>
-              <p className="text-sm md:text-base mb-6">
-                At the heart of every unforgettable journey lies a great guide,
-                and that’s exactly what we provide. Our expert guides are
-                seasoned professionals who bring destinations to life through
-                their deep knowledge, passion, and storytelling skills. With
-                years of experience, they not only navigate you through the most
-                iconic landmarks but also uncover hidden treasures, local
-                secrets, and off-the-beaten-path wonders that make your travel
-                experience truly unique.
-              </p>
-              <p className="hidden lg:block text-sm md:text-base mb-6">
-                They don’t just lead tours; they forge connections between you
-                and the destination. By blending cultural insights, fascinating
-                anecdotes, and practical tips, our guides turn every journey
-                into a story worth telling. Above all, your safety and
-                satisfaction are their top priorities, ensuring that every
-                moment of your adventure is enjoyable, memorable, and
-                worry-free.With our expert guides by your side, travel becomes
-                more than just sightseeing—it transforms into an extraordinary
-                exploration filled with meaningful moments and lasting memories.
-              </p>
-              <Link
-                to="/our_packages"
-                className="bg-[#FFDA32] text-white font-bold py-3 px-6 lg:px-8 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
-              >
-                Book Now
-              </Link>
+      {/* Why Choose Us */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Why Choose Dorze Tours</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Authentic cultural experiences guided by local experts with sustainable tourism practices</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center p-6">
+              <div className="text-4xl mb-4">🏔</div>
+              <h3 className="text-xl font-semibold mb-2">Unique Destinations</h3>
+              <p className="text-gray-600">Access to remote communities and hidden natural wonders</p>
+            </div>
+            <div className="text-center p-6">
+              <div className="text-4xl mb-4">👨👩👧👦</div>
+              <h3 className="text-xl font-semibold mb-2">Local Experts</h3>
+              <p className="text-gray-600">Guides born and raised in the regions we&apos;re visiting</p>
+            </div>
+            <div className="text-center p-6">
+              <div className="text-4xl mb-4">🌱</div>
+              <h3 className="text-xl font-semibold mb-2">Sustainable Tourism</h3>
+              <p className="text-gray-600">Community-focused travel that gives back</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="testimonial_section w-full h-min-screen flex items-center justify-center py-[100px] bg-[rgb(34, 34, 34)] lg:py-[200px]">
-        <div className="testimonial_content w-full px-6 md:w-[90%] lg:w-[80%] flex flex-col items-center justify-center">
-          <h1 className="lg:text-6xl text-4xl md:text-5xl text-center">
-            What our clients say about us
-          </h1>
-          <p className="text-xl lg:text-2xl mt-3 text-gray-500">Testimonials</p>
-          <div className="testimonial_list w-[100%] flex items-center justify-center flex-wrap mt-[100px] gap-[50px]">
-            {testimonials.map((testimonial, index) => (
-              <div
-                className="testimonial_card w-[350px] h-[300px] border-[2px] border-dotted border-gray-200 p-[30px] text-left relative flex flex-col items-center"
-                key={index}
-                data-aos="fade-up"
-                data-aos-duration="600"
-              >
-                <p>{testimonial.testimonial}</p>
-                <div className="testimonial_profile absolute flex gap-[30px] border-dotted border-t-[2px] border-[#ffae00] bottom-[10px] w-[90%] py-[20px] px-[10px]">
-                  <img
-                    className="w-[50px] h-[50px] rounded-full"
-                    src={testimonial.profileImg}
-                    alt={`${testimonial.name}'s profile`}
-                    width="50"
-                    height="50"
-                  />
+      {/* CTA Section */}
+      <section className="bg-orange-500 text-white py-16 w-full">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">Ready for Your Adventure?</h2>
+          <p className="text-xl mb-8">Start planning your unforgettable Ethiopian experience today</p>
+          <Link
+            to="/our_packages"
+            className="bg-white text-orange-500 px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            Browse All Tours
+          </Link>
+        </div>
+      </section>
 
-                  <div className="testimonial_info">
-                    <h3>{testimonial.name}</h3>
-                    <p>{testimonial.location}</p>
+      <section className="w-full relative my-24">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Image Section */}
+            <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
+              <img
+                className="w-full h-[500px] object-top object-cover transform transition-transform duration-500 group-hover:scale-105"
+                src="/assets/images/image 3.webp"
+                alt="Expert Guide"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <span className="absolute top-4 left-4 bg-[#FFDA32]/90 px-4 py-2 rounded-full text-sm font-semibold text-gray-900">
+                🇪🇹 Certified Local Expert
+              </span>
+            </div>
+
+            {/* Content Section */}
+            <div className="space-y-6 lg:space-y-8">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#FFDA32] to-[#F29404] bg-clip-text text-transparent">
+                Guided by Passion,<br />Informed by Heritage
+              </h2>
+
+              <div className="space-y-4">
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Our guides aren't just experts - they're storytellers, historians,
+                  and ambassadors of Ethiopian culture. With deep roots in their
+                  communities, they transform tours into immersive journeys.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-white rounded-xl border-2 border-[#FFDA32]/20 hover:border-[#F29404] transition-colors">
+                    <h3 className="font-semibold text-lg mb-2 text-gray-800">Cultural Immersion</h3>
+                    <p className="text-sm text-gray-500">Access to authentic local experiences</p>
+                  </div>
+                  <div className="p-4 bg-white rounded-xl border-2 border-[#FFDA32]/20 hover:border-[#F29404] transition-colors">
+                    <h3 className="font-semibold text-lg mb-2 text-gray-800">Safety First</h3>
+                    <p className="text-sm text-gray-500">Certified wilderness first responders</p>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="w-full h-max relative my-[100px]">
-        <img
-          className="object-cover object-center w-full h-[70vh] md:h-[70vh] lg:h-[80vh] z-10"
-          src="/assets/images/Rectangle 158.webp"
-          alt="Background"
-        />
-        <div className="absolute w-full top-0 left-0 h-full bg-gradient-to-br from-[#48057D] to-[#2ADDE7] z-20 opacity-[80%] backdrop-blur-[25px]"></div>
-        <div className="absolute w-full top-0 h-full flex items-center justify-center">
-          <div className="w-[90%] md:w-[80%] lg:w-[70%] flex flex-col md:flex-row lg:gap-8 items-center justify-between">
-            <img
-              className="hidden lg:block w-[60%] md:w-[40%] lg:w-[50%] object-cover object-center z-30"
-              src="/assets/images/lodge.webp"
-              alt="Guide"
-              width="600" // Replace with actual width
-              height="400" // Replace with actual height
-            />
 
-            <div className="w-full md:w-[50%] z-30 text-white flex flex-col items-start justify-center p-6 md:p-8 rounded-lg bg-black bg-opacity-50 backdrop-blur-md">
-              <img
-                className="lg:hidden w-[60%] md:w-[40%] lg:w-[50%] object-cover object-center z-30"
-                src="/assets/images/lodge.webp"
-                alt="Guide"
-              />
-              <h1 className="font-bold text-4xl md:text-5xl lg:text-5xl tracking-wide mb-4">
-                Experience the Heart of Ethiopia at Dorze Lodge
-              </h1>
-              <p className="text-sm md:text-base mb-6">
-                Discover the beauty and tranquility of Dorze Lodge, nestled in
-                the lush highlands of Ethiopia. Escape the ordinary with
-                stunning views, traditional hospitality, and an unforgettable
-                experience. Whether you seek adventure, culture, or relaxation,
-                Dorze Lodge offers the perfect retreat. Book your stay today and
-                immerse yourself in the vibrant heritage of the Dorze people.
-              </p>
               <Link
-                to="/dorze_lodge"
-                className="bg-[#FFDA32] text-white font-bold py-3 px-6 lg:px-8 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
+                to="/our_packages"
+                className="inline-flex items-center px-8 py-4 bg-[#F29404] text-white rounded-xl font-bold hover:bg-[#DB8303] transition-colors shadow-lg hover:shadow-xl"
               >
-                Book Now
+                Meet Our Guides
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
               </Link>
             </div>
           </div>
         </div>
       </section>
-    </div>
+
+      <section className="w-full py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">What Our Travelers Say</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Hear from adventurers who've explored Ethiopia with us
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => {
+              const initials = testimonial.name
+                .split(/[ .]+/)
+                .slice(0, 2)
+                .map(n => n[0])
+                .join('')
+                .toUpperCase();
+
+              return (
+                <div key={index} className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all">
+                  <div className="flex items-center mb-6">
+                    <div className="w-12 h-12 bg-[#F29404] rounded-full flex items-center justify-center text-white font-bold mr-4">
+                      {initials}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">{testimonial.name}</h3>
+                      <p className="text-sm text-gray-500">{testimonial.location}</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">
+                    "{testimonial.testimonial}"
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="w-full relative my-24">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Image Section */}
+            <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
+              <img
+                className="w-full h-[500px] object-cover transform transition-transform duration-500 group-hover:scale-105"
+                src="/assets/images/lodge.webp"
+                alt="Dorze Lodge"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <span className="absolute top-4 left-4 bg-[#FFDA32]/90 px-4 py-2 rounded-full text-sm font-semibold text-gray-900">
+                🏆 Award-Winning Lodge
+              </span>
+            </div>
+
+            {/* Content Section */}
+            <div className="space-y-6 lg:space-y-8">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#FFDA32] to-[#F29404] bg-clip-text text-transparent">
+                Experience the Heart<br />of Ethiopia
+              </h2>
+
+              <div className="space-y-4">
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Discover the beauty and tranquility of Dorze Lodge, nestled in
+                  the lush highlands. Escape the ordinary with stunning views,
+                  traditional hospitality, and an unforgettable experience.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-white rounded-xl border-2 border-[#FFDA32]/20 hover:border-[#F29404] transition-colors">
+                    <h3 className="font-semibold text-lg mb-2 text-gray-800">Cultural Retreat</h3>
+                    <p className="text-sm text-gray-500">Immerse in Dorze traditions</p>
+                  </div>
+                  <div className="p-4 bg-white rounded-xl border-2 border-[#FFDA32]/20 hover:border-[#F29404] transition-colors">
+                    <h3 className="font-semibold text-lg mb-2 text-gray-800">Nature Escapes</h3>
+                    <p className="text-sm text-gray-500">Breathtaking mountain views</p>
+                  </div>
+                </div>
+              </div>
+
+              <Link
+                to="/dorze_lodge"
+                className="inline-flex items-center px-8 py-4 bg-[#F29404] text-white rounded-xl font-bold hover:bg-[#DB8303] transition-colors shadow-lg hover:shadow-xl"
+              >
+                Book Your Stay
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div >
   );
 }
 

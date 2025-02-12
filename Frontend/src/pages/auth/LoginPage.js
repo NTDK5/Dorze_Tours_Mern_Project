@@ -5,7 +5,7 @@ import signInImage from '../../assets/image2.webp';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCredentials } from '../../states/slices/authSlice';
-
+import GoogleLoginButton from '../../components/GoogleLoginButton';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -122,6 +122,7 @@ function LoginPage() {
             >
               {loading ? 'Signing In...' : 'Sign In'}
             </button>
+
             {error && <div className="text-red-500 mt-3">{error}</div>}
             <p className="text-center mt-4">
               Don&apos;t have an account?{' '}
@@ -130,6 +131,7 @@ function LoginPage() {
               </Link>
             </p>
           </form>
+          <GoogleLoginButton />
         </div>
       </div>
     </div>

@@ -2,18 +2,18 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const userSchema = mongoose.Schema({
-  first_name: { type: String, required: true },
-  last_name: { type: String, required: true },
+  first_name: { type: String, required: false },
+  last_name: { type: String, required: false },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   country: { type: String },
   profile_pic: { type: String },
   verificationToken: { type: String },
   verified: { type: Boolean, default: false },
   role: {
     type: String,
-    enum: ["customer", "admin"], // Only "customer" and "admin" are allowed values
-    default: "customer", // Default role is "customer"
+    enum: ["user", "admin"], // Only "customer" and "admin" are allowed values
+    default: "user", // Default role is "customer"
   },
 });
 userSchema.pre("save", async function (next) {

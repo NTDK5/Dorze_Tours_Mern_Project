@@ -89,11 +89,10 @@ function Header() {
   return (
     <header
       id="header"
-      className={`top-0 w-full h-[8vh] p-4 z-50 sticky transition-all duration-300 ${
-        isScrolled || !isHomePage || menuOpen
+      className={`top-0 w-full h-[8vh] p-4 z-50 sticky transition-all duration-300 ${isScrolled || !isHomePage || menuOpen
           ? 'bg-white text-black shadow-lg'
           : 'bg-transparent text-white'
-      }`}
+        }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         <div className="text-xl lg:text-3xl font-bold logo">
@@ -114,68 +113,71 @@ function Header() {
         {/* Navigation Menu */}
         <nav
           ref={menuRef}
-          className={`md:flex items-center space-x-8 transition-all duration-300  lg:bg-white/30 border border-white/20  backdrop:blur-lg  rounded-[25px] ${
-            menuOpen
+          className={`md:flex items-center space-x-8 transition-all duration-300  lg:bg-white/30 border border-white/20  backdrop:blur-lg  rounded-[25px] ${menuOpen
               ? 'block bg-white shadow-md absolute top-[6vh] right-0 w-full rounded-md px-0 '
               : 'hidden'
-          } md:block`}
+            } md:block`}
         >
           <div
-            className={`flex flex-row items-center ${isScrolled || !isHomePage ? '' : 'lg:font-bold'} gap-2 md:flex-row md:space-x-8 text-[16px]  ${
-              menuOpen ? 'py-2 px-4 w-full flex-col' : ''
-            }`}
+            className={`flex flex-row items-center ${isScrolled || !isHomePage ? '' : 'lg:font-bold'} gap-2 md:flex-row md:space-x-8 text-[16px]  ${menuOpen ? 'py-2 px-4 w-full flex-col' : ''
+              }`}
           >
             <Link
               to="/"
-              className={`block hover:border-white  hover:text-[#F29404] py-0 ${
-                isActive('/')
+              className={`block hover:border-white  hover:text-[#F29404] py-0 ${isActive('/')
                   ? 'lg:text-white text-[#F29404] py-2 px-6 rounded-[25px] font-bold lg:bg-[#F29404]'
                   : ''
-              } ${menuOpen ? 'py-2 px-0 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
+                } ${menuOpen ? 'py-2 px-0 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
               Home
             </Link>
             <Link
               to="/about_us"
-              className={`block hover:border-white  hover:text-[#F29404] ${
-                isActive('/about_us')
+              className={`block hover:border-white  hover:text-[#F29404] ${isActive('/about_us')
                   ? 'text-[#F29404] border-b-2 border-white font-bold'
                   : ''
-              } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
+                } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
               About us
             </Link>
             <Link
               to="/dorze_lodge"
-              className={`block hover:border-white  hover:text-[#F29404] ${
-                isActive('/dorze_lodge')
+              className={`block hover:border-white  hover:text-[#F29404] ${isActive('/dorze_lodge')
                   ? 'text-[#F29404] border-b-2 border-white font-bold'
                   : ''
-              } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
+                } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
               Dorze Lodge
             </Link>
             <Link
               to="/our_packages"
-              className={`block hover:border-white  hover:text-[#F29404] ${
-                isActive('/our_packages')
+              className={`block hover:border-white  hover:text-[#F29404] ${isActive('/our_packages')
                   ? 'text-[#F29404] border-b-2 border-white font-bold'
                   : ''
-              } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
+                } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
               Our Packages
             </Link>
             <Link
+              to="/cars"
+              className={`block hover:border-white  hover:text-[#F29404] ${isActive('/cars')
+                ? 'text-[#F29404] border-b-2 border-white font-bold'
+                : ''
+                } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
+              onClick={closeMenu}
+            >
+              Car Rental
+            </Link>
+            <Link
               to="/gallery"
-              className={`block hover:border-white  hover:text-[#F29404] ${
-                isActive('/gallery')
+              className={`block hover:border-white  hover:text-[#F29404] ${isActive('/gallery')
                   ? 'text-[#F29404] border-b-2 border-white font-bold'
                   : ''
-              } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
+                } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
               Gallery
@@ -183,11 +185,10 @@ function Header() {
             {!userInfo && (
               <Link
                 to="/login"
-                className={` h-max rounded-[25px] px-6 py-2 md:inline-block ${
-                  menuOpen
+                className={` h-max rounded-[25px] px-6 py-2 md:inline-block ${menuOpen
                     ? 'w-full text-center flex justify-center items-center rounded-md'
                     : ''
-                }`}
+                  }`}
                 onClick={closeMenu}
               >
                 Sign In
@@ -224,11 +225,10 @@ function Header() {
                 <FaUser />
               </button>
               <div
-                className={`absolute right-0 mt-2 w-48 bg-white text-black shadow-md rounded-md transition-all duration-300 overflow-hidden ${
-                  dropdownOpen
+                className={`absolute right-0 mt-2 w-48 bg-white text-black shadow-md rounded-md transition-all duration-300 overflow-hidden ${dropdownOpen
                     ? 'max-h-screen opacity-100'
                     : 'max-h-0 opacity-0'
-                }`}
+                  }`}
               >
                 <Link
                   to="/profile"

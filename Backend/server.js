@@ -12,8 +12,13 @@ const bookingRoutes = require("./routes/bookingRoutes.js");
 const reviewRoutes = require("./routes/reviewRoutes.js");
 const paymentRoutes = require("./routes/paymentRoutes.js");
 const lodgeRoutes = require("./routes/lodgeRoutes.js");
+const carRoutes = require("./routes/carRoutes.js")
 const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 const path = require("path");
+const session = require('express-session');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const passportConfig = require('./config/passport');
 
 const app = express();
 
@@ -46,6 +51,15 @@ app.use(
   },
   express.static("uploads")
 );
+// Middleware
+app.use(session({
+  secret: 'omotribestour', // Change this to a secure key
+  resave: false,
+  saveUninitialized: true,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // Rate Limiter
 const limiter = rateLimit({
@@ -62,9 +76,14 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/lodge", lodgeRoutes);
+app.use("/api/cars", carRoutes)
 app.use(notFound);
 app.use(errorHandler);
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 // Port
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+

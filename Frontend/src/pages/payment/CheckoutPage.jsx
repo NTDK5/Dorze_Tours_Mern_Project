@@ -2,105 +2,184 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState } from 'react';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { initiatePayment } from '../../services/paymentService';
+import { useSelector } from 'react-redux';
 
 const Checkout = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { tourId, roomId, numberOfPeople, totalAmount, bookingId } =
-    location.state || {};
+  const Navigate = useNavigate();
+  const { booking, totalAmount } = location.state || {};
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { userInfo } = useSelector((state) => state.auth);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  if (!booking) {
+    return <Navigate to="/" replace />;
+  }
 
-  // Handle successful payment
-  const handlePaymentSuccess = (details) => {
-    console.log('Payment successful:', details);
-
-    navigate('/payment/success');
-  };
-
-  // Handle payment error
-  const handlePaymentError = (error) => {
-    console.error('Payment error:', error);
-    setErrorMessage(
-      'There was an issue processing your payment. Please try again.'
-    );
-  };
-
-  const handlePaymentCancel = () => {
-    setErrorMessage('Payment was cancelled.');
-  };
-  const createOrder = async () => {
+  const handlePayment = async () => {
     try {
-      setIsLoading(true);
-      setErrorMessage('');
+      setLoading(true);
+      setError(null);
 
-      const payload = tourId
-        ? { bookingType: 'tour', tourId, totalAmount, bookingId }
-        : { bookingType: 'lodge', roomId, totalAmount, bookingId };
+      const paymentData = {
+        bookingType: booking.bookingType.toLowerCase(),
+        tourId: booking.tourId,
+        lodgeId: booking.lodgeId,
+        carId: booking.car,
+        roomId: booking.roomId,
+        totalAmount: totalAmount,
+        email: userInfo.email,
+        first_name: userInfo.first_name,
+        last_name: userInfo.last_name,
+        bookingId: booking._id,
+        tx_ref: `tx-${Date.now()}`,
+        callback_url: `${window.location.origin}/payment/success`,
+        return_url: `${window.location.origin}/payment/success`,
+      };
 
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/payments/create`,
-        payload,
-        {
-          withCredentials: true,
-        }
-      );
-      setIsLoading(false);
-      const { id } = response.data;
-      console.log(response.data);
-      return id;
-    } catch (error) {
-      setIsLoading(false);
-      console.error('Error creating PayPal order:', error);
-      setErrorMessage('Failed to create PayPal order. Please try again.');
-      return null;
+      const response = await initiatePayment(paymentData);
+
+      if (response.data && response.data.approvalUrl) {
+        window.location.href = response.data.approvalUrl;
+      } else {
+        console.error('PayPal response:', response.data);
+        throw new Error('PayPal approval URL not found in response');
+      }
+    } catch (err) {
+      console.error('Payment error:', err);
+      setError(err.message || 'Payment initialization failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderBookingDetails = () => {
+    switch (booking.bookingType) {
+      case 'tour':
+        return (
+          <>
+            <div className="flex justify-between">
+              <span>Tour:</span>
+              <span>{booking.tourTitle}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Destination:</span>
+              <span>{booking.tour?.destination}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Booking Date:</span>
+              <span>{new Date(booking.bookingDate).toLocaleDateString()}</span>
+            </div>
+          </>
+        );
+
+      case 'lodge':
+        return (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Lodge Name:</span>
+              <span>{booking.tourTitle}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Room Type:</span>
+              <span>{booking.roomType}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Check-in:</span>
+              <span>{new Date(booking.checkInDate).toLocaleDateString()}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Check-out:</span>
+              <span>{new Date(booking.checkOutDate).toLocaleDateString()}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Number of Guests:</span>
+              <span>{booking.numberOfPeople}</span>
+            </div>
+            <div className="border-t pt-4 mt-4">
+              <div className="flex justify-between items-center font-semibold">
+                <span>Total Amount:</span>
+                <span>${totalAmount.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        );
+      case 'Car':
+        return (
+          <>
+            <div className="flex justify-between">
+              <span>Car:</span>
+              <span>{booking.carDetails?.brand} {booking.carDetails?.model}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Pickup Location:</span>
+              <span>{booking.pickupLocation}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Dropoff Location:</span>
+              <span>{booking.dropoffLocation}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Pickup Date:</span>
+              <span>{new Date(booking.checkInDate).toLocaleDateString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Return Date:</span>
+              <span>{new Date(booking.checkOutDate).toLocaleDateString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Duration:</span>
+              <span>{booking.totalDays} days</span>
+            </div>
+          </>
+        );
+
+      default:
+        return null;
     }
   };
 
   return (
-    <div className="w-full h-[90vh] flex items-center justify-center">
-      <div className="lg:w-[40%] w-[80%] bg-white shadow-lg rounded-md p-4 flex flex-col items-center">
-        <h1 className="text-2xl font-bold my-5">Checkout</h1>
-        {totalAmount ? (
-          <>
-            <p className="text-lg mb-4">Total Amount: ${totalAmount}</p>{' '}
-            {errorMessage && (
-              <p className="text-red-500 mb-4">{errorMessage}</p>
-            )}
-            <PayPalScriptProvider
-              options={{
-                'client-id':
-                  'AQMqiHoeCykCYWXMZD73debxm35IPMYZhJPvT0xfOjP5yzv5x0RM9FfJH6eLvNlIDNW9mrIC2qkFCQ5J',
-              }}
-            >
-              <PayPalButtons
-                style={{ layout: 'vertical' }}
-                createOrder={(data, actions) => {
-                  return createOrder();
-                }}
-                onApprove={(data, actions) => {
-                  return actions.order
-                    .capture()
-                    .then(handlePaymentSuccess)
-                    .catch(handlePaymentError);
-                }}
-                onError={handlePaymentError}
-                onCancel={handlePaymentCancel}
-              />
-            </PayPalScriptProvider>
-            {isLoading && (
-              <p className="mt-4 text-blue-500">Processing your payment...</p>
-            )}
-          </>
-        ) : (
-          <p className="text-lg text-red-500">
-            Missing booking information. Please try again.
-          </p>
-        )}
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-bold mb-6">Checkout Details</h2>
+
+          <div className="space-y-4">
+            {renderBookingDetails()}
+
+            <div className="flex justify-between">
+              <span>Number of People:</span>
+              <span>{booking.numberOfPeople}</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Payment Method:</span>
+              <span className="capitalize">{booking.paymentMethod}</span>
+            </div>
+
+            <div className="flex justify-between font-bold text-lg border-t pt-4">
+              <span>Total Amount:</span>
+              <span>${totalAmount}</span>
+            </div>
+          </div>
+
+          {error && (
+            <div className="mt-4 p-3 bg-red-100 text-red-700 rounded">
+              {error}
+            </div>
+          )}
+
+          <button
+            onClick={handlePayment}
+            disabled={loading}
+            className="mt-6 w-full bg-[#FFDA32] text-white py-3 px-4 rounded-md hover:bg-[#F29404] transition-colors disabled:opacity-50"
+          >
+            {loading ? 'Processing...' : 'Pay Now'}
+          </button>
+        </div>
       </div>
     </div>
   );

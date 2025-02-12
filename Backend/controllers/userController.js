@@ -176,6 +176,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.country = req.body.country || user.country;
     user.email = req.body.email || user.email;
     user.password = req.body.password || user.password;
+    user.role = req.body.role || user.role
 
     const updatedUser = await user.save();
     res.status(200).json({
@@ -191,6 +192,31 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+const adminUpdateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id)
+  if (user) {
+    user.first_name = req.body.first_name || user.first_name;
+    user.last_name = req.body.last_name || user.last_name;
+    user.country = req.body.country || user.country;
+    user.email = req.body.email || user.email;
+    user.password = req.body.password || user.password;
+    user.role = req.body.role || user.role
+
+    const updatedUser = await user.save();
+    res.status(200).json({
+      _id: updatedUser._id,
+      first_name: updatedUser.first_name,
+      last_name: updatedUser.last_name,
+      country: updatedUser.country,
+      email: updatedUser.email,
+      role: updatedUser.role,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 
 const getAllUsers = asyncHandler(async (req, res) => {
   try {
@@ -231,4 +257,5 @@ module.exports = {
   updateUserProfile,
   getAllUsers,
   deleteUser,
+  adminUpdateUserProfile
 };

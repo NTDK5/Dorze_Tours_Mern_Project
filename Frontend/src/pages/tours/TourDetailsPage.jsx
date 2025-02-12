@@ -67,7 +67,7 @@ const TourDetails = () => {
     }
     try {
       const bookingData = {
-        bookingType: 'Tour', // Set booking type
+        bookingType: 'Tour',
         tourId: id,
         numberOfPeople,
         paymentMethod,
@@ -82,14 +82,18 @@ const TourDetails = () => {
           withCredentials: true,
         }
       );
-      console.log(data);
 
       navigate('/checkout', {
         state: {
+          booking: {
+            _id: data._id,
+            tourTitle: tour.title,
+            checkInDate: bookingDate,
+            checkOutDate: bookingDate,
+            numberOfPeople: numberOfPeople,
+            tourId: tour._id,
+          },
           totalAmount: tour.price * numberOfPeople,
-          tourId: tour._id,
-          numberOfPeople: numberOfPeople,
-          bookingId: data._id,
         },
       });
     } catch (error) {
@@ -239,7 +243,7 @@ const TourDetails = () => {
                               Instant confirmation
                             </h1>
                             <p className="text-gray-400">
-                              Don’t wait for the confirmation!
+                              Don&apos;t wait for the confirmation!
                             </p>
                           </div>
                         </div>

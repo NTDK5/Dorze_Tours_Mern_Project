@@ -5,60 +5,100 @@ const asyncHandler = require("express-async-handler");
 const Tour = require("../models/tourModel");
 const Payment = require("../models/paymentModel");
 const Lodge = require("../models/lodgeModel");
+const Car = require("../models/carModel");
+const axios = require('axios');
 
 // @desc Get all payments
 // @route GET /api/payments
 // @access Private (Admin)
 const getAllPayments = asyncHandler(async (req, res) => {
   try {
-    // Fetch all payments, optionally populate related fields like user and booking
     const payments = await Payment.find()
-      .populate("user", "name email") // Populate user details (assuming the user model has name and email fields)
-      .populate("booking", "bookingDate status totalPrice"); // Populate booking details (adjust according to your booking schema)
+      .populate({
+        path: "booking",
+        populate: { path: "user", select: "first_name last_name email" }
+      });
 
-    // If no payments found
-    if (!payments) {
-      res.status(404);
-      throw new Error("No payments found");
+    if (!payments.length) {
+      return res.status(404).json({ message: "No payments found" });
     }
 
-    // Send the response with all payment details
     res.status(200).json(payments);
   } catch (error) {
-    res.status(500);
-    throw new Error("Error fetching payments");
+    console.error("Error fetching payments:", error.message);
+    res.status(500).json({ message: "Error fetching payments", error: error.message });
   }
 });
+
+const deletePayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find and delete the payment
+    const deletedPayment = await Payment.findByIdAndDelete(id);
+
+    if (!deletedPayment) {
+      return res.status(404).json({ message: "Payment not found" });
+    }
+
+    res.status(200).json({ message: "Payment deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting payment:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 
 // @desc Create PayPal payment
 // @route POST /api/payments/create
 // @access Private
 const createPayPalPayment = asyncHandler(async (req, res) => {
-  const { bookingType, tourId, roomId, totalAmount, bookingId } = req.body;
+  const { bookingType, tourId, lodgeId, carId, roomId, totalAmount, bookingId } = req.body;
+
+  if (!totalAmount || isNaN(totalAmount)) {
+    res.status(400);
+    throw new Error("Invalid total amount");
+  }
 
   let itemDescription;
   let customId;
 
-  if (bookingType === "tour") {
-    const tour = await Tour.findById(tourId);
-    if (!tour) {
-      res.status(404);
-      throw new Error("Tour not found");
-    }
-    itemDescription = `Booking for ${tour.title}`;
-    customId = JSON.stringify({ tourId, bookingId });
-  } else if (bookingType === "lodge") {
-    const lodge = await Lodge.findOne({ "roomTypes._id": roomId });
-    if (!lodge) {
-      res.status(404);
-      throw new Error("Lodge not found");
-    }
-    const room = lodge.roomTypes.id(roomId);
-    itemDescription = `Room Booking: ${room.type} at ${lodge.name}`;
-    customId = JSON.stringify({ roomId, bookingId });
-  } else {
-    res.status(400);
-    throw new Error("Invalid booking type");
+  switch (bookingType.toLowerCase()) {
+    case "tour":
+      const tour = await Tour.findById(tourId);
+      if (!tour) {
+        res.status(404);
+        throw new Error("Tour not found");
+      }
+      itemDescription = `Tour Booking: ${tour.title}`;
+      customId = JSON.stringify({ tourId, bookingId });
+      break;
+
+    case "lodge":
+      const lodge = await Lodge.findOne({ "roomTypes._id": roomId });
+      if (!lodge) {
+        res.status(404);
+        throw new Error("Lodge not found");
+      }
+      const room = lodge.roomTypes.id(roomId);
+      itemDescription = `Room Booking: ${room.type} at ${lodge.name}`;
+      customId = JSON.stringify({ lodgeId, roomId, bookingId });
+      break;
+
+    case "car":
+      const car = await Car.findById(carId);
+      if (!car) {
+        res.status(404);
+        throw new Error("Car not found");
+      }
+      itemDescription = `Car Rental: ${car.brand} ${car.model}`;
+      customId = JSON.stringify({ carId, bookingId });
+      break;
+
+    default:
+      res.status(400);
+      throw new Error("Invalid booking type");
   }
 
   const request = new paypal.orders.OrdersCreateRequest();
@@ -72,49 +112,36 @@ const createPayPalPayment = asyncHandler(async (req, res) => {
           value: totalAmount.toString(),
         },
         description: itemDescription,
-        custom_id: customId, // Custom ID for tracking booking
+        custom_id: customId,
       },
     ],
     application_context: {
-      return_url: "http://localhost:3000/payment/success",
-      cancel_url: "http://localhost:3000/payment/cancel",
-    },
+      brand_name: "Dorze Tours",
+      landing_page: "LOGIN",
+      user_action: "PAY_NOW",
+      return_url: `${process.env.FRONTEND_URL}/payment/success`,
+      cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`
+    }
   });
 
   try {
     const order = await client().execute(request);
-    const userId = req.user._id; // Assuming user is authenticated
 
-    // Create a payment record
-    const payment = await Payment.create({
-      booking: bookingId,
-      user: userId,
-      amount: totalAmount,
-      paymentMethod: "paypal",
-      paymentStatus: "pending",
-      transactionId: order.result.id, // Store PayPal order ID here
-      bookingType: bookingType,
-    });
+    // Get the approval URL from the links array
+    const approvalUrl = order.result.links.find(link => link.rel === "approve")?.href;
 
-    // Update the booking with the paymentId
-    const booking = await Booking.findById(bookingId);
-    if (booking) {
-      booking.paymentId = payment._id;
-      await booking.save();
-    } else {
-      throw new Error("Booking not found");
+    if (!approvalUrl) {
+      throw new Error("PayPal approval URL not found");
     }
 
-    res.status(201).json({
-      id: order.result.id,
-      status: order.result.status,
-      links: order.result.links,
-      payment, // Include the payment details in the response
+    res.json({
+      orderID: order.result.id,
+      approvalUrl
     });
-  } catch (error) {
-    console.error("PayPal payment creation failed:", error);
+  } catch (err) {
+    console.error("PayPal order creation error:", err);
     res.status(500);
-    throw new Error("Payment creation failed");
+    throw new Error("Error creating PayPal order");
   }
 });
 
@@ -233,4 +260,138 @@ const validateWebhook = async (headers, body) => {
   return true; // For now, assume it's valid
 };
 
-module.exports = { createPayPalPayment, handlePayPalWebhook, getAllPayments };
+const CHAPA_SECRET_KEY = process.env.CHAPA_SECRET_KEY;
+const CHAPA_URL = process.env.CHAPA_URL || 'https://api.chapa.co/v1';
+
+// Initialize payment
+const initializePayment = async (req, res) => {
+  try {
+    const {
+      amount,
+      email,
+      first_name,
+      last_name,
+      tx_ref,
+      callback_url,
+      bookingId,
+    } = req.body;
+
+    const response = await axios.post(
+      `${CHAPA_URL}/transaction/initialize`,
+      {
+        amount,
+        currency: 'ETB',
+        email,
+        first_name,
+        last_name,
+        tx_ref,
+        callback_url,
+        return_url: callback_url,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${CHAPA_SECRET_KEY}`,
+        },
+      }
+    );
+
+    // Create payment record
+    await Payment.create({
+      amount,
+      bookingId,
+      txRef: tx_ref,
+      status: 'pending',
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error('Payment initialization error:', error);
+    res.status(500).json({
+      message: 'Payment initialization failed',
+      error: error.message,
+    });
+  }
+};
+
+// Verify payment
+const verifyPayment = async (req, res) => {
+  try {
+    const { txRef } = req.params;
+
+    const response = await axios.get(
+      `${CHAPA_URL}/transaction/verify/${txRef}`,
+      {
+        headers: {
+          Authorization: `Bearer ${CHAPA_SECRET_KEY}`,
+        },
+      }
+    );
+
+    if (response.data.status === 'success') {
+      // Update payment status
+      const payment = await Payment.findOne({ txRef });
+      if (payment) {
+        payment.status = 'completed';
+        await payment.save();
+
+        // Update booking status
+        await Booking.findByIdAndUpdate(payment.bookingId, {
+          paymentStatus: 'paid',
+        });
+      }
+    }
+
+    res.json(response.data);
+  } catch (error) {
+    console.error('Payment verification error:', error);
+    res.status(500).json({
+      message: 'Payment verification failed',
+      error: error.message,
+    });
+  }
+};
+
+const capturePayment = asyncHandler(async (req, res) => {
+  const { orderID } = req.body;
+  const request = new paypal.orders.OrdersCaptureRequest(orderID);
+  request.requestBody({});
+
+  try {
+    const capture = await client().execute(request);
+    const custom_id = JSON.parse(capture.result.purchase_units[0].custom_id);
+    const booking = await Booking.findById(custom_id.bookingId);
+
+    if (booking) {
+      booking.status = "confirmed";
+      booking.paymentId = capture.result.id;
+      await booking.save();
+
+      // Update car availability if it's a car booking
+      if (booking.bookingType === "Car" && booking.car) {
+        const car = await Car.findById(booking.car);
+        if (car) {
+          car.available = false;
+          await car.save();
+        }
+      }
+    }
+
+    res.json({
+      captureID: capture.result.id,
+      bookingId: custom_id.bookingId
+    });
+  } catch (err) {
+    res.status(500);
+    throw new Error("Error capturing PayPal payment");
+  }
+});
+
+module.exports = {
+  createPayPalPayment,
+  handlePayPalWebhook,
+  getAllPayments,
+  initializePayment,
+  verifyPayment,
+  capturePayment,
+  deletePayment
+};
