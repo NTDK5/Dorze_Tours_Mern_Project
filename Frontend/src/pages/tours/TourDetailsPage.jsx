@@ -18,11 +18,22 @@ import {
   FaUserFriends,
   FaCalendar,
   FaCar,
+  FaUsers,
+  FaHeart,
+  FaShare,
+  FaChevronRight,
 } from 'react-icons/fa';
 import TourCard from '../../components/TourCard';
 import Reviews from '../../components/Reviews';
 import { useSelector } from 'react-redux';
 import LoadingScreen from '../../components/Loading';
+import BookingWidget from '../../components/BookingWidget';
+import ItineraryAccordion from '../../components/ItineraryAccordion';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const TourDetails = () => {
   const [tour, setTour] = useState(null);
@@ -87,6 +98,7 @@ const TourDetails = () => {
         state: {
           booking: {
             _id: data._id,
+            bookingType: "Tour",
             tourTitle: tour.title,
             checkInDate: bookingDate,
             checkOutDate: bookingDate,
@@ -126,277 +138,121 @@ const TourDetails = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <>
-      <section className="w-full flex flex-col items-center justify-center">
-        {tour ? (
-          <>
-            <div className="w-[90%] lg:w-[80%] mt-10">
-              <h1 className="w-full text-left text-2xl lg:text-4xl font-bold">
-                {tour.title}
-              </h1>
-              <div className="flex w-full mt-4 gap-4 items-center">
-                <p className="text-[#778088] flex items-center justify-center">
-                  <FaMapMarkerAlt />
-                  {tour.destination}
-                </p>
-                <div className="flex items-center">
-                  <div className="flex gap-2 items-center">
-                    <div className="flex">
-                      {renderStars(tour.averageRating)}{' '}
-                    </div>
+    <div className="bg-gray-50 min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-[60vh] bg-gray-900">
+        <Swiper
+          modules={[Navigation, Pagination]}
+          navigation
+          pagination={{ clickable: true }}
+          className="h-full"
+        >
+          {tour?.imageUrl?.map((img, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src={`${process.env.REACT_APP_API_URL}/${img}`}
+                alt={tour.title}
+                className="w-full h-full object-cover opacity-90 z-2"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-                    <p>{tour.averageRating}/5</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="lg:w-[80%] w-full mt-10 flex flex-col items-center lg:items-start lg:flex-row  gap-20">
-              <div className="flex w-full lg:hidden py-6 px-2 lg:gap-8 z-30 items-center justify-between lg:justify-end lg:mt-0 lg:static lg:bg-none bg-white fixed bottom-0">
-                <p className="font-mulish">
-                  From{' '}
-                  <span className="text-xl lg:text-2xl">${tour?.price}/</span>{' '}
-                  Person
-                </p>
-                <a
-                  href="#book_form"
-                  className="bg-[#FFDA32]  text-white font-bold py-2 px-4 lg:px-12 rounded-lg shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:scale-105 focus:outline-none"
-                >
-                  Book Now
-                </a>
-              </div>
-              <div className="lg:w-[70%] w-full">
-                <img
-                  className=" w-full lg:h-[600px] object-cover object-center"
-                  src={`${process.env.REACT_APP_API_URL}/${tour.imageUrl[0].replace(/\\/g, '/')}`}
-                  alt={tour.title}
-                />
-                <div className="w-full">
-                  <div className="features w-full  bg-[#F8FAFC] flex flex-col items-center justify-center py-8 gap-4">
-                    <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
-                      <div className="w-full md:w-[45%]">
-                        <div className="w-full items-start py-2 flex gap-5">
-                          <FaUndoAlt className="mt-2 text-[#d5212d]" />
-                          <div>
-                            <h1 className="text-[18px] text-top font-semibold">
-                              Free Cancellation
-                            </h1>
-                            <p className="text-gray-400">
-                              Cancel up to 24 hours in advance to receive a full
-                              refund
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="w-full md:w-[45%]">
-                        <div className="w-full items-start py-2 flex gap-5">
-                          <FaMapMarkerAlt className="mt-2 text-[#d5212d]" />
-                          <div>
-                            <h1 className="text-[18px] font-semibold">
-                              Health precautions
-                            </h1>
-                            <p className="text-gray-400">
-                              Special health and safety measures apply. Learn
-                              more
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
-                      <div className="w-full md:w-[45%]">
-                        <div className="w-full items-start py-2 flex gap-5">
-                          <FaTicketAlt className="mt-2 text-[#d5212d]" />
-                          <div>
-                            <h1 className="text-[18px] text-top font-semibold">
-                              Mobile ticketing
-                            </h1>
-                            <p className="text-gray-400">
-                              Use your phone or print your voucher
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="w-full md:w-[45%]">
-                        <div className="w-full items-start py-2 flex gap-5">
-                          <FaClock className="mt-2 text-[#d5212d]" />
-                          <div>
-                            <h1 className="text-[18px] font-semibold">
-                              Duration {tour.duration}
-                            </h1>
-                            <p className="text-gray-400">
-                              Check availability to see starting times.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="w-[90%] flex flex-col md:flex-row justify-between gap-4">
-                      <div className="w-full md:w-[45%]">
-                        <div className="w-full items-start py-2 flex gap-5">
-                          <FaUndoAlt className="mt-2 text-[#d5212d]" />
-                          <div>
-                            <h1 className="text-[18px] text-top font-semibold">
-                              Instant confirmation
-                            </h1>
-                            <p className="text-gray-400">
-                              Don&apos;t wait for the confirmation!
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="w-full md:w-[45%]">
-                        <div className="w-full items-start py-2 flex gap-5">
-                          <FaUndoAlt className="mt-2 text-[#d5212d]" />
-                          <div>
-                            <h1 className="text-[18px] font-semibold">
-                              Live tour guide in English
-                            </h1>
-                            <p className="text-gray-400">English</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="lg:w-[70%] px-4 w-full mt-10">
-                  <h2 className="text-2xl font-bold mb-4">Description</h2>
-                  <p className="text-gray-700">{tour.description}</p>
-                </div>
-
-                <div className="lg:w-[70%] w-full mt-10">
-                  <h2 className="text-2xl font-bold mb-4">Activities</h2>
-                  <h3 className="text-xl font-semibold mb-2 ml-4">
-                    Day {tour.itinerary[0].day}
-                  </h3>
-                  <ul className="list-disc pl-5 text-gray-700 ml-6">
-                    {tour.itinerary[0].activities.map((activityItem) => (
-                      <li key={activityItem._id} className="mb-2">
-                        <span className="font-semibold">
-                          {activityItem.time}:{' '}
-                        </span>
-                        {activityItem.activity}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div
-                id="book_form"
-                className="lg:w-[25%] h-max lg:sticky lg:top-[10vh] w-[80%] mt-6 lg:mt-0 bg-white shadow-lg rounded-md px-4 py-2"
-              >
-                <h1 className="w-full text-xl text-black py-2 border-b-2 border-gray-50 font-semibold">
-                  Bookings
-                </h1>
-
-                <form className="mt-4">
-                  <div className="mt-4">
-                    <label
-                      htmlFor="bookingDate"
-                      className="block font-semibold"
-                    >
-                      Select Date
-                    </label>
-                    <input
-                      type="date"
-                      id="bookingDate"
-                      className="border p-2 rounded w-full bg-gray-100"
-                      value={bookingDate}
-                      onChange={(e) => setBookingDate(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mt-4">
-                    <label
-                      htmlFor="numberOfPeople"
-                      className="block font-semibold"
-                    >
-                      Number of People
-                    </label>
-                    <input
-                      type="number"
-                      id="numberOfPeople"
-                      className="border p-2 rounded w-full bg-gray-100"
-                      value={numberOfPeople}
-                      onChange={(e) => setNumberOfPeople(e.target.value)}
-                      min="1"
-                      required
-                    />
-                  </div>
-                  <div className="mt-4">
-                    <label
-                      htmlFor="paymentMethod"
-                      className="block font-semibold"
-                    >
-                      Payment Method
-                    </label>
-                    <select
-                      id="paymentMethod"
-                      className="border p-2 rounded w-full bg-gray-100"
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    >
-                      <option value="credit card">Credit Card</option>
-                      <option value="paypal">PayPal</option>
-                      <option value="bank transfer">Bank Transfer</option>
-                    </select>
-                  </div>
-                  <div className="mt-4">
-                    <label htmlFor="notes" className="block font-semibold">
-                      Notes (Optional)
-                    </label>
-                    <textarea
-                      id="notes"
-                      className="border p-2 rounded w-full bg-gray-100"
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      maxLength="500"
-                      placeholder="Any special requests or details..."
-                    />
-                  </div>
-                  <div className="mt-6 flex flex-col gap-4">
-                    <button
-                      type="button"
-                      className="bg-[#7BBCB0] text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
-                      onClick={handleContinue}
-                    >
-                      Continue
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <section className=" w-full lg:w-[80%] flex flex-col items-center justify-center py-10">
-              <h1 className="text-2xl font-bold w-full text-left my-5">
-                Related Tours
-              </h1>
-              <div className="w-[90%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {TourData.length > 0 ? (
-                  TourData.map((tour, index) => (
-                    <TourCard tour={tour} key={index} />
-                  ))
-                ) : (
-                  <p>No tours available.</p>
-                )}
-              </div>
-            </section>
-          </>
-        ) : (
-          <p>No tour found</p>
-        )}
-      </section>
-      <section className="w-full flex items-center justify-center">
-        <div className="lg:w-[80%] w-full">
-          <Reviews tourId={tour?._id} tour={tour} />
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent p-6 z-10">
+          <div className="max-w-7xl mx-auto">
+            <nav className="text-sm text-gray-300 mb-2">
+              <Link to="/our_packages" className="hover:text-[#FFDA32]">
+                Tours
+              </Link>
+              <FaChevronRight className="inline-block mx-2 text-sm" />
+              <span className="text-[#FFDA32]">{tour?.title}</span>
+            </nav>
+            <h1 className="text-4xl font-bold text-white">{tour?.title}</h1>
+          </div>
         </div>
       </section>
-    </>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Tour Details */}
+        <div className="lg:col-span-2">
+          {/* Highlights Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center text-[#F29404]">
+                <FaStar className="mr-1" />
+                <span className="font-semibold">{tour?.averageRating} ({tour?.totalRatings} reviews)</span>
+              </div>
+              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                Best Seller
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div className="flex items-center">
+                <FaMapMarkerAlt className="text-[#F29404] mr-2" />
+                <span className="font-medium">{tour?.destination}</span>
+              </div>
+              <div className="flex items-center">
+                <FaClock className="text-[#F29404] mr-2" />
+                <span>{tour?.duration} Days</span>
+              </div>
+              <div className="flex items-center">
+                <FaUsers className="text-[#F29404] mr-2" />
+                <span>Group Size: {tour?.groupSize}</span>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-[#FFDA32] to-[#F29404] bg-clip-text text-transparent">
+                Tour Highlights
+              </h3>
+              <p className="text-gray-600 leading-relaxed">{tour?.description}</p>
+            </div>
+          </div>
+
+          {/* Itinerary Section */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-[#FFDA32] to-[#F29404] bg-clip-text text-transparent">
+              Detailed Itinerary
+            </h3>
+            <ItineraryAccordion itinerary={tour?.itinerary} />
+          </div>
+
+          {/* Reviews Section */}
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <Reviews tourId={tour?._id} tour={tour} />
+          </div>
+        </div>
+
+        {/* Booking Widget Sidebar */}
+        <div className="lg:col-span-1">
+          <BookingWidget
+            price={tour?.price}
+            onBooking={handleContinue}
+            onWishlist={handleSaveToWishlist}
+            userInfo={userInfo}
+            tour={tour}
+          />
+        </div>
+      </div>
+
+      {/* Related Tours */}
+      <section className="max-w-7xl mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-[#FFDA32] to-[#F29404] bg-clip-text text-transparent">
+          You Might Also Like
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {TourData.map((tour, index) => (
+            <TourCard
+              tour={tour}
+              key={index}
+              className="transform transition duration-300 hover:scale-105"
+            />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 };
 

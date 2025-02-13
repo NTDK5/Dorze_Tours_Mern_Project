@@ -10,6 +10,7 @@ const Checkout = () => {
   const location = useLocation();
   const Navigate = useNavigate();
   const { booking, totalAmount } = location.state || {};
+  console.log(booking)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { userInfo } = useSelector((state) => state.auth);

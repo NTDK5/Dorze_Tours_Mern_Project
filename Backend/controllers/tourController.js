@@ -69,8 +69,8 @@ const getTourById = asyncHandler(async (req, res) => {
 // @route PUT /api/tours/:id
 // @access Private
 const updateTour = asyncHandler(async (req, res) => {
-  const { title, description, destination, price, duration, itinerary } = req.body;
-  const imageUrl = req.file ? req.file.path : null;
+  const { title, description, destination, price, duration, itinerary, imageUrl } = req.body;
+  const newImages = req.files?.map(file => file.path) || [];
 
   const tour = await Tour.findById(req.params.id);
 
@@ -81,28 +81,20 @@ const updateTour = asyncHandler(async (req, res) => {
     tour.price = price || tour.price;
     tour.duration = duration || tour.duration;
 
-    // Update image URL if a new file is uploaded
-    if (imageUrl) {
-      tour.imageUrl = imageUrl;
-    }
+    // Merge existing images with new ones
+    tour.imageUrl = [
+      ...newImages,
+      ...(typeof imageUrl === 'string' && imageUrl.trim() !== '' ? JSON.parse(imageUrl) : [])
+    ];
 
-    // Ensure itinerary is updated correctly
     if (itinerary) {
-      tour.itinerary = typeof itinerary === 'string' ? JSON.parse(itinerary) : itinerary;
+      tour.itinerary = typeof itinerary === 'string'
+        ? JSON.parse(itinerary)
+        : itinerary;
     }
 
     const updatedTour = await tour.save();
-
-    res.status(200).json({
-      _id: updatedTour._id,
-      title: updatedTour.title,
-      description: updatedTour.description,
-      destination: updatedTour.destination,
-      price: updatedTour.price,
-      duration: updatedTour.duration,
-      imageUrl: updatedTour.imageUrl,
-      itinerary: updatedTour.itinerary,
-    });
+    res.status(200).json(updatedTour);
   } else {
     res.status(404);
     throw new Error("Tour not found");

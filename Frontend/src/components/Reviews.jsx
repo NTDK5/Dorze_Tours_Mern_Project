@@ -102,7 +102,7 @@ const Reviews = ({ tourId, tour }) => {
     e.preventDefault();
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/reviews`,
+        `${process.env.REACT_APP_API_URL}/api/reviews`,
         {
           ...reviewForm,
           tourId: tourId,
@@ -170,11 +170,10 @@ const Reviews = ({ tourId, tour }) => {
         <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
 
         <button
-          className={`px-4 py-2 rounded mb-4 text-white ${
-            userReviewed
+          className={`px-4 py-2 rounded mb-4 text-white ${userReviewed
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-blue-500 hover:bg-blue-600'
-          }`}
+            }`}
           onClick={() => setShowForm(!showForm)}
           disabled={userReviewed || !userInfo}
         >
@@ -318,18 +317,16 @@ const Reviews = ({ tourId, tour }) => {
           )}
           <div className="flex justify-between mt-4">
             <button
-              className={`px-4 py-2 rounded ${
-                page === 1 ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'
-              }`}
+              className={`px-4 py-2 rounded ${page === 1 ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'
+                }`}
               onClick={handlePreviousPage}
               disabled={page === 1}
             >
               Previous
             </button>
             <button
-              className={`px-4 py-2 rounded ${
-                page === pages ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'
-              }`}
+              className={`px-4 py-2 rounded ${page === pages ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'
+                }`}
               onClick={handleNextPage}
               disabled={page === pages}
             >

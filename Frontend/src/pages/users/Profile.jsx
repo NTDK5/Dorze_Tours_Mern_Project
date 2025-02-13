@@ -46,7 +46,7 @@ const Profile = () => {
     console.log(formData);
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/users/profile`,
+        `${process.env.REACT_APP_API_URL}/api/users/${userInfo._id}`,
         formData,
         {
           headers: {

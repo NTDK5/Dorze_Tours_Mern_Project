@@ -28,7 +28,7 @@ const AllUsersPage = () => {
   const updateUserRoleMutation = useMutation({
     mutationFn: async ({ id, newRole }) => {
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/users/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/users/admin/${id}`,
         { role: newRole },
         { withCredentials: true }
       );

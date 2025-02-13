@@ -72,13 +72,8 @@ const LodgePage = () => {
   const [checkOutDate, setCheckOutDate] = useState('');
   const [selectedRoomType, setSelectedRoomType] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('paypal');
-  const [bottomBoundary, setBottomBoundary] = useState(0);
   const navigate = useNavigate();
-  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1024);
-  const [stickyTop, setStickyTop] = useState(window.innerHeight * 0.1);
-  const [isReady, setIsReady] = useState(false);
-  const referenceRef = useRef(null);
-  const floatingRef = useRef(null);
+
   useEffect(() => {
     document.title = 'Dorze Lodge';
   }, []);
@@ -156,6 +151,7 @@ const LodgePage = () => {
         state: {
           booking: {
             _id: response.data._id,
+            bookingType: "Lodge",
             tourTitle: lodge.name,
             checkInDate: checkInDate,
             checkOutDate: checkOutDate,

@@ -223,12 +223,14 @@ const deleteBooking = asyncHandler(async (req, res) => {
 // @route GET /api/bookings/user
 // @access Private
 const getUserBookings = asyncHandler(async (req, res) => {
-  const userId = req.user._id; // Assuming `req.user` contains the authenticated user's information
+  const userId = req.user._id;
 
   const userBookings = await Booking.find({ user: userId })
-    .populate("tour", "title destination") // Populating tour details
-    .populate("lodge", "name location") // Populating lodge details
-    .populate("user", "first_name last_name email"); // Populating user details (optional)
+    .populate("tour", "title destination")
+    .populate("lodge", "name location")
+    .populate("user", "first_name last_name email")
+    .populate("car", "brand model year transmission fuelType seats pricePerDay");
+
 
   if (userBookings.length > 0) {
     res.status(200).json(userBookings);

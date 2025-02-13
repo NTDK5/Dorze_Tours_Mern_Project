@@ -61,12 +61,15 @@ const AdminToursPage = () => {
     mutationFn: async (updatedTour) => {
       const formData = new FormData();
 
+      // Get only new files to upload
+      const newImages = updatedTour.imageUrl.filter(img => img instanceof File);
+      newImages.forEach(file => formData.append('image', file));
+
+      // Clear existing images by not sending them
+      formData.append('imageUrl', JSON.stringify([]));
+
       Object.keys(updatedTour).forEach(key => {
-        if (key === 'imageUrl') {
-          updatedTour.imageUrl.forEach(image => {
-            formData.append('imageUrl', image);
-          });
-        } else if (key === 'itinerary') {
+        if (key === 'itinerary') {
           formData.append('itinerary', JSON.stringify(updatedTour.itinerary));
         } else {
           formData.append(key, updatedTour[key]);

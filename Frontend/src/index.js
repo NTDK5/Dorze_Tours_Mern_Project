@@ -42,6 +42,7 @@ import ErrorBoundary from './ErrorBoundary';
 import CarRentalPage from './pages/cars/CarRentalPage';
 const queryClient = new QueryClient();
 import AdminCarsPage from './pages/admin/AdminCarsPage';
+import AdminReviewsPage from './pages/reviews/AdminReviewsPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -74,6 +75,7 @@ const router = createBrowserRouter(
         <Route path="bookings" element={<AdminBookingPage />} />
         <Route path="payments" element={<AdminPaymentPage />} />
         <Route path="cars" element={<AdminCarsPage />} />
+        <Route path="reviews" element={<AdminReviewsPage />} />
       </Route>
     </Route>
   )

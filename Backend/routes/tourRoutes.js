@@ -29,7 +29,7 @@ router.get("/", getTours);
 router
   .route("/:id")
   .get(getTourById)
-  .put(protect, admin, upload.single("image"), updateTour)
+  .put(protect, admin, upload.array("image"), updateTour)
   .delete(protect, admin, deleteTour);
 
 module.exports = router;
