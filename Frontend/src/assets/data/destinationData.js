@@ -1,8 +1,9 @@
 import AddisAbabaImagemain from '../images/addis_ababa_image_main.webp';
-import semenMountainsMain from '../images/simien_mountains_main.webp';
+import baleMountainsMain from '../images/bale_mountains.webp';
 import omoValleyMain from '../images/omo_valley_main.webp';
 import bahirDarMain from '../images/bahir_dar_main.webp';
 import lalibelaMain from '../images/lalibela_main.webp';
+import tigrayMain from '../images/tigray_main.jpg';
 
 export const destinationData = [
   {
@@ -20,10 +21,10 @@ export const destinationData = [
     tourType: ['Cultural', 'Religious', 'Adventure'],
   },
   {
-    name: 'Simien Mountains',
+    name: 'Bale Mountains',
     description:
-      'The Simien Mountains offer some of the most breathtaking landscapes in Africa, with dramatic peaks, deep valleys, and unique wildlife. It’s a paradise for trekkers and nature lovers.',
-    image: semenMountainsMain,
+      'The Bale Mountains, located in southeastern Ethiopia, are a stunning highland region known for their diverse ecosystems, breathtaking landscapes, and rich wildlife. Home to the Bale Mountains National Park, this area features vast plateaus, dense forests, alpine meadows, and dramatic peaks, including Tullu Dimtuu, the second-highest mountain in Ethiopia.',
+    image: baleMountainsMain,
     tourType: ['Adventure', 'Wildlife', 'Nature'],
   },
   {
@@ -31,7 +32,6 @@ export const destinationData = [
     description:
       'Bahir Dar, located near the shores of Lake Tana, is known for its beautiful scenery, ancient monasteries, and the stunning Blue Nile Falls. It’s a gateway to the wonders of Northern Ethiopia.',
     image: bahirDarMain,
-
     tourType: ['Cultural', 'Family', 'Nature'],
   },
   {
@@ -40,5 +40,12 @@ export const destinationData = [
       'The Omo Valley is a cultural melting pot, home to numerous indigenous tribes with unique customs and traditions. Visiting the Omo Valley offers a deep dive into Ethiopia’s rich and diverse cultural heritage.',
     image: omoValleyMain,
     tourType: ['Cultural', 'Adventure', 'Photography'],
+  },
+  {
+    name: 'Tigray',
+    description:
+      'Tigray is known for its stunning rock-hewn churches, dramatic mountain landscapes, and rich ancient history. The region is home to sites like the breathtaking Gheralta rock churches and the ruins of Aksum, an ancient city that was once the center of a powerful civilization.',
+    image: tigrayMain,
+    tourType: ['Cultural', 'Historical', 'Adventure'],
   },
 ];

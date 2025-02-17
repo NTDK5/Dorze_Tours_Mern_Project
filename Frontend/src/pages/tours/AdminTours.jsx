@@ -61,22 +61,18 @@ const AdminToursPage = () => {
     mutationFn: async (updatedTour) => {
       const formData = new FormData();
 
-      // Get only new files to upload
+      // Separate existing URLs and new files
+      const existingImages = updatedTour.imageUrl.filter(img => typeof img === 'string');
       const newImages = updatedTour.imageUrl.filter(img => img instanceof File);
       newImages.forEach(file => formData.append('image', file));
 
-      // Clear existing images by not sending them
-      formData.append('imageUrl', JSON.stringify([]));
+      formData.append('data', JSON.stringify({
+        ...updatedTour,
+        imageUrl: existingImages, // Preserve existing URLs
+        clearExistingImages: newImages.length > 0 // Only clear when adding new images
+      }));
 
-      Object.keys(updatedTour).forEach(key => {
-        if (key === 'itinerary') {
-          formData.append('itinerary', JSON.stringify(updatedTour.itinerary));
-        } else {
-          formData.append(key, updatedTour[key]);
-        }
-      });
-
-      const { data } = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/api/tours/${updatedTour._id}`,
         formData,
         {
@@ -87,7 +83,6 @@ const AdminToursPage = () => {
           withCredentials: true,
         }
       );
-      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['totalTours']);
@@ -99,6 +94,7 @@ const AdminToursPage = () => {
       toast.error(error.response?.data?.message || 'Error updating tour');
     },
   });
+
 
   const handleEdit = (tour) => {
     setEditingTour(tour);

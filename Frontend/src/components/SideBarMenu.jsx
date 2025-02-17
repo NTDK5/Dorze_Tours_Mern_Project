@@ -124,6 +124,20 @@ function SideBarMenu() {
             Reviews
           </span>
         </NavLink>
+
+        <NavLink
+          to={'/admin/custom-trips'}
+          end
+          className={({ isActive }) =>
+            `w-full px-4 py-2 rounded-md flex items-center gap-4 transition-all duration-300 ${isActive ? 'bg-[#4880FF]' : ''
+            }`
+          }
+        >
+          <FaClipboardList className="text-xl flex-shrink-0" />
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+            Custom Trips
+          </span>
+        </NavLink>
       </nav>
 
       <button

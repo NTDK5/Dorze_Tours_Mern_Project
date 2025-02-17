@@ -19,7 +19,7 @@ const session = require('express-session');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const passportConfig = require('./config/passport');
-
+const customTripRoutes = require('./routes/customTripRoutes.js')
 const app = express();
 
 // Connect to MongoDB
@@ -77,6 +77,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/lodge", lodgeRoutes);
 app.use("/api/cars", carRoutes)
+app.use("/api/custom-trips", customTripRoutes)
 app.use(notFound);
 app.use(errorHandler);
 // Connect to MongoDB

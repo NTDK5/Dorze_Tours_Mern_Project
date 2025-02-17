@@ -11,7 +11,7 @@ import {
   FaPhone,
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-// import footerImg from '../assets/images/Footer_img.webp';
+
 
 const Footer = () => {
   return (
@@ -38,7 +38,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Contact Info */}
+
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-gray-800">Get in Touch</h3>
             <div className="space-y-3">
@@ -57,7 +57,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-gray-800">Explore</h3>
             <div className="grid grid-cols-1 gap-3">
@@ -73,7 +72,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Popular Tours */}
+
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-gray-800">Popular Tours</h3>
             <div className="grid grid-cols-1 gap-3">
@@ -90,10 +89,9 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Divider */}
+
         <div className="my-12 border-t border-gray-200" />
 
-        {/* Bottom Section */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-gray-600">
           <div className="flex items-center gap-6 text-2xl">
             <FaFacebook className="hover:text-[#F29404] cursor-pointer transition-colors" />

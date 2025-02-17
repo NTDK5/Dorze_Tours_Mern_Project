@@ -32,6 +32,8 @@ code {
 .hero-section {
   background-image: url('./assets/image1.webp');
   background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .hero-gradient {
   background: linear-gradient(

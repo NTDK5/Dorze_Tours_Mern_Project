@@ -23,6 +23,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import LoadingScreen from '../../components/Loading.jsx';
+import HeroSection from '../../components/HeroSection.jsx';
 function HomePage() {
   useEffect(() => {
     document.title = 'Dorze Tours - Home ';
@@ -51,28 +52,9 @@ function HomePage() {
   if (isLoading) return <LoadingScreen />;
   return (
     <div className="relative flex flex-col items-center justify-center">
-      <section className="hero-section relative top-[-8vh] left-0 w-full h-[104vh] bg-cover bg-center">
-        <div className="absolute inset-0 hero-gradient"></div>
-        <div className="w-full flex items-center justify-center relative h-full">
-          <div className=" flex flex-col items-center justify-center lg:w-[90%]   text-center text-white px-4">
-            <h1 className="text-4xl sm:text-4xl md:text-4xl lg:text-5xl font-bold">
-              Explore the Timeless Beauty of Ethiopia
-            </h1>
-            <p className="mt-4 text-base lg:text-center text-sm w-[80%] md:text-xl lg:w-[60%]">
-              Discover Ethiopia&apos;s most breathtaking destinations with
-              personalized tours that bring you closer to the heart of Africa.
-            </p>
-            <Link
-              to="/our_packages"
-              className="mt-4 bg-[#FFDA32] text-white font-bold py-2 px-8 rounded-lg lg:px-12 shadow-[0_8px_20px_rgba(255,218,50,0.5)] transform transition-all duration-300 hover:shadow-[0_12px_24px_rgba(255,218,50,0.5)] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FFDA32]"
-            >
-              Book Now
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
-      <section className="lg:absolute lg:top-[100vh] w-[90%] md:w-[80%] flex flex-col md:flex-row items-center justify-center rounded-lg lg:transform lg:-translate-y-[80%] bg-white shadow-md  lg:py-0 py-10">
+      <section className=" w-[90%] md:w-[80%] flex flex-col md:flex-row items-center justify-center lg:transform lg:translate-y-[-50%] tran rounded-lg  bg-white shadow-md  lg:py-0 py-10">
         <div className="flex flex-col md:flex-row items-center justify-between w-[90%] ">
           <div className="flex flex-col w-full md:w-1/3 mb-4 md:mb-0">
             <div className="flex items-center gap-2 justify-start py-2 px-4">
@@ -139,7 +121,7 @@ function HomePage() {
             experiences.
           </p>
         </div>
-        <div className="px-4 md:px-10 w-[90%] md:w-[70%] lg:w-[50%] flex flex-wrap justify-center gap-4 lg:gap-8 mt-10 md:mt-14">
+        <div className="px-4 md:px-10 w-[90%] md:w-[70%] lg:w-[60%] flex flex-wrap justify-center gap-4 lg:gap-8 mt-10 md:mt-14">
           {destinationData?.map((destination, index) => (
             <button
               key={index}
@@ -345,7 +327,7 @@ function HomePage() {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
               <img
                 className="w-full h-[500px] object-cover transform transition-transform duration-500 group-hover:scale-105"
-                src="/assets/images/lodge.webp"
+                src="/assets/images/Rectangle 158.webp"
                 alt="Dorze Lodge"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

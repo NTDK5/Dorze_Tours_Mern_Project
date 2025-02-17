@@ -140,7 +140,7 @@ const TourDetails = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[60vh] bg-gray-900">
+      <section className="relative h-[50vh] lg:h-[70vh] bg-gray-900">
         <Swiper
           modules={[Navigation, Pagination]}
           navigation
@@ -152,7 +152,7 @@ const TourDetails = () => {
               <img
                 src={`${process.env.REACT_APP_API_URL}/${img}`}
                 alt={tour.title}
-                className="w-full h-full object-cover opacity-90 z-2"
+                className="w-full h-full object-cover object- opacity-90 z-2"
               />
             </SwiperSlide>
           ))}

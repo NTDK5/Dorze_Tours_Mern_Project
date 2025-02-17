@@ -1,10 +1,8 @@
 import React from 'react';
-// import { useDispatch } from 'react-redux';
-// import { setCredentials } from '../states/slices/authSlice';
 
 
 const GoogleLoginButton = () => {
-    // const dispatch = useDispatch();
+
     const handleLogin = () => {
         const googleAuthUrl = `${process.env.REACT_APP_API_URL}/api/users/auth/google`;
         window.location.href = googleAuthUrl;

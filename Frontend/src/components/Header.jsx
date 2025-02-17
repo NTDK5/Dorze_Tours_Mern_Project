@@ -36,7 +36,6 @@ function Header() {
   };
 
   useEffect(() => {
-    // Close the menu if clicked outside
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
@@ -45,13 +44,11 @@ function Header() {
 
     document.addEventListener('mousedown', handleClickOutside);
 
-    // Clean up the event listener on component unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  // Detect scroll and update the background color
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -66,7 +63,7 @@ function Header() {
     window.addEventListener('scroll', handleScroll);
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Update mobile state on resize
+      setIsMobile(window.innerWidth < 768);
     };
 
     window.addEventListener('resize', handleResize);
@@ -89,9 +86,9 @@ function Header() {
   return (
     <header
       id="header"
-      className={`top-0 w-full h-[8vh] p-4 z-50 sticky transition-all duration-300 ${isScrolled || !isHomePage || menuOpen
-          ? 'bg-white text-black shadow-lg'
-          : 'bg-transparent text-white'
+      className={`fixed top-0 w-full h-[8vh] p-4 z-50 transition-all duration-300 ${isScrolled || !isHomePage || menuOpen
+        ? 'bg-white text-black shadow-lg'
+        : 'bg-transparent text-white'
         }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
@@ -105,17 +102,16 @@ function Header() {
           </a>
         </div>
 
-        {/* Hamburger icon */}
         <div className="md:hidden" onClick={toggleMenu}>
           {menuOpen ? <FaTimes size={30} /> : <FaBars size={30} />}
         </div>
 
-        {/* Navigation Menu */}
+
         <nav
           ref={menuRef}
           className={`md:flex items-center space-x-8 transition-all duration-300  lg:bg-white/30 border border-white/20  backdrop:blur-lg  rounded-[25px] ${menuOpen
-              ? 'block bg-white shadow-md absolute top-[6vh] right-0 w-full rounded-md px-0 '
-              : 'hidden'
+            ? 'block bg-white shadow-md absolute top-[6vh] right-0 w-full rounded-md px-0 '
+            : 'hidden'
             } md:block`}
         >
           <div
@@ -125,8 +121,8 @@ function Header() {
             <Link
               to="/"
               className={`block hover:border-white  hover:text-[#F29404] py-0 ${isActive('/')
-                  ? 'lg:text-white text-[#F29404] py-2 px-6 rounded-[25px] font-bold lg:bg-[#F29404]'
-                  : ''
+                ? 'lg:text-white text-[#F29404] py-2 px-6 rounded-[25px] font-bold lg:bg-[#F29404]'
+                : ''
                 } ${menuOpen ? 'py-2 px-0 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
@@ -135,8 +131,8 @@ function Header() {
             <Link
               to="/about_us"
               className={`block hover:border-white  hover:text-[#F29404] ${isActive('/about_us')
-                  ? 'text-[#F29404] border-b-2 border-white font-bold'
-                  : ''
+                ? 'text-[#F29404] border-b-2 border-white font-bold'
+                : ''
                 } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
@@ -145,22 +141,22 @@ function Header() {
             <Link
               to="/dorze_lodge"
               className={`block hover:border-white  hover:text-[#F29404] ${isActive('/dorze_lodge')
-                  ? 'text-[#F29404] border-b-2 border-white font-bold'
-                  : ''
+                ? 'text-[#F29404] border-b-2 border-white font-bold'
+                : ''
                 } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
-              Dorze Lodge
+              Lodge
             </Link>
             <Link
               to="/our_packages"
               className={`block hover:border-white  hover:text-[#F29404] ${isActive('/our_packages')
-                  ? 'text-[#F29404] border-b-2 border-white font-bold'
-                  : ''
+                ? 'text-[#F29404] border-b-2 border-white font-bold'
+                : ''
                 } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
-              Our Packages
+              Tours
             </Link>
             <Link
               to="/cars"
@@ -175,8 +171,8 @@ function Header() {
             <Link
               to="/gallery"
               className={`block hover:border-white  hover:text-[#F29404] ${isActive('/gallery')
-                  ? 'text-[#F29404] border-b-2 border-white font-bold'
-                  : ''
+                ? 'text-[#F29404] border-b-2 border-white font-bold'
+                : ''
                 } ${menuOpen ? 'py-2 w-full text-center rounded-md hover:bg-gray-100' : ''}`}
               onClick={closeMenu}
             >
@@ -186,8 +182,8 @@ function Header() {
               <Link
                 to="/login"
                 className={` h-max rounded-[25px] px-6 py-2 md:inline-block ${menuOpen
-                    ? 'w-full text-center flex justify-center items-center rounded-md'
-                    : ''
+                  ? 'w-full text-center flex justify-center items-center rounded-md'
+                  : ''
                   }`}
                 onClick={closeMenu}
               >
@@ -197,7 +193,6 @@ function Header() {
 
             {userInfo && isMobile && (
               <>
-                {/* Settings and Logout in mobile view */}
                 <Link
                   to="/profile"
                   className={`block hover:border-white  hover:text-[#F29404] py-2 w-full text-center rounded-md hover:bg-gray-100`}
@@ -217,7 +212,6 @@ function Header() {
 
           {userInfo && !isMobile && (
             <div className="relative">
-              {/* Dropdown for desktop view */}
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white"
@@ -226,8 +220,8 @@ function Header() {
               </button>
               <div
                 className={`absolute right-0 mt-2 w-48 bg-white text-black shadow-md rounded-md transition-all duration-300 overflow-hidden ${dropdownOpen
-                    ? 'max-h-screen opacity-100'
-                    : 'max-h-0 opacity-0'
+                  ? 'max-h-screen opacity-100'
+                  : 'max-h-0 opacity-0'
                   }`}
               >
                 <Link

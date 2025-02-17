@@ -1,5 +1,14 @@
 const asyncHandler = require("express-async-handler");
 const Tour = require("../models/tourModel.js");
+const fs = require('fs/promises');
+const path = require('path');
+
+
+const deleteFile = async (filename) => {
+  const filePath = path.join(__dirname, '../uploads', filename);
+  await fs.unlink(filePath).catch(err => console.error(`Error deleting file ${filename}:`, err));
+};
+
 const registerTour = asyncHandler(async (req, res) => {
   try {
     const { title, description, destination, price, duration, itinerary } =
@@ -69,36 +78,36 @@ const getTourById = asyncHandler(async (req, res) => {
 // @route PUT /api/tours/:id
 // @access Private
 const updateTour = asyncHandler(async (req, res) => {
-  const { title, description, destination, price, duration, itinerary, imageUrl } = req.body;
-  const newImages = req.files?.map(file => file.path) || [];
-
   const tour = await Tour.findById(req.params.id);
+  const data = JSON.parse(req.body.data || '{}');
+  const { clearExistingImages, imageUrl, ...updateData } = data;
 
-  if (tour) {
-    tour.title = title || tour.title;
-    tour.description = description || tour.description;
-    tour.destination = destination || tour.destination;
-    tour.price = price || tour.price;
-    tour.duration = duration || tour.duration;
-
-    // Merge existing images with new ones
-    tour.imageUrl = [
-      ...newImages,
-      ...(typeof imageUrl === 'string' && imageUrl.trim() !== '' ? JSON.parse(imageUrl) : [])
-    ];
-
-    if (itinerary) {
-      tour.itinerary = typeof itinerary === 'string'
-        ? JSON.parse(itinerary)
-        : itinerary;
+  if (clearExistingImages) {
+    // Remove existing images from storage sequentially
+    for (const url of tour.imageUrl) {
+      const filename = url.split('/').pop();
+      await deleteFile(filename);
     }
-
-    const updatedTour = await tour.save();
-    res.status(200).json(updatedTour);
-  } else {
-    res.status(404);
-    throw new Error("Tour not found");
+    tour.imageUrl = [];
   }
+
+  // Process new image uploads
+  if (req.files) {
+    const newImages = req.files.map(file => file.path);
+    tour.imageUrl = [...tour.imageUrl, ...newImages];
+  }
+
+  // Update other fields without overwriting imageUrl
+  Object.assign(tour, updateData);
+
+  if (data.itinerary) {
+    tour.itinerary = typeof data.itinerary === 'string'
+      ? JSON.parse(data.itinerary)
+      : data.itinerary;
+  }
+
+  const updatedTour = await tour.save();
+  res.status(200).json(updatedTour);
 });
 
 
@@ -128,3 +137,5 @@ module.exports = {
   updateTour,
   deleteTour,
 };
+
+
