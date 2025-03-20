@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import FormAuthGuard from './FormAuthGuard';
 
 const Reviews = ({ tourId, tour }) => {
   const [reviews, setReviews] = useState([]);
@@ -171,8 +172,8 @@ const Reviews = ({ tourId, tour }) => {
 
         <button
           className={`px-4 py-2 rounded mb-4 text-white ${userReviewed
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-blue-500 hover:bg-blue-600'
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-blue-500 hover:bg-blue-600'
             }`}
           onClick={() => setShowForm(!showForm)}
           disabled={userReviewed || !userInfo}
@@ -181,79 +182,81 @@ const Reviews = ({ tourId, tour }) => {
         </button>
       </div>
       {showForm ? (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-2">Guide Rating (0-5):</label>
-            <input
-              type="number"
-              name="guideRating"
-              value={reviewForm.guideRating}
-              onChange={handleFormChange}
-              min="0"
-              max="5"
-              step="0.1"
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Transportation Rating (0-5):</label>
-            <input
-              type="number"
-              name="transportationRating"
-              value={reviewForm.transportationRating}
-              onChange={handleFormChange}
-              min="0"
-              max="5"
-              step="0.1"
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Value for Money Rating (0-5):</label>
-            <input
-              type="number"
-              name="valueForMoneyRating"
-              value={reviewForm.valueForMoneyRating}
-              onChange={handleFormChange}
-              min="0"
-              max="5"
-              step="0.1"
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Safety Rating (0-5):</label>
-            <input
-              type="number"
-              name="safetyRating"
-              value={reviewForm.safetyRating}
-              onChange={handleFormChange}
-              min="0"
-              max="5"
-              step="0.1"
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Comment:</label>
-            <textarea
-              name="comment"
-              value={reviewForm.comment}
-              onChange={handleFormChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Submit Review
-          </button>
-        </form>
+        <FormAuthGuard formTitle="submitting a review">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block mb-2">Guide Rating (0-5):</label>
+              <input
+                type="number"
+                name="guideRating"
+                value={reviewForm.guideRating}
+                onChange={handleFormChange}
+                min="0"
+                max="5"
+                step="0.1"
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Transportation Rating (0-5):</label>
+              <input
+                type="number"
+                name="transportationRating"
+                value={reviewForm.transportationRating}
+                onChange={handleFormChange}
+                min="0"
+                max="5"
+                step="0.1"
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Value for Money Rating (0-5):</label>
+              <input
+                type="number"
+                name="valueForMoneyRating"
+                value={reviewForm.valueForMoneyRating}
+                onChange={handleFormChange}
+                min="0"
+                max="5"
+                step="0.1"
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Safety Rating (0-5):</label>
+              <input
+                type="number"
+                name="safetyRating"
+                value={reviewForm.safetyRating}
+                onChange={handleFormChange}
+                min="0"
+                max="5"
+                step="0.1"
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Comment:</label>
+              <textarea
+                name="comment"
+                value={reviewForm.comment}
+                onChange={handleFormChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Submit Review
+            </button>
+          </form>
+        </FormAuthGuard>
       ) : (
         <>
           {reviews.length > 0 && (

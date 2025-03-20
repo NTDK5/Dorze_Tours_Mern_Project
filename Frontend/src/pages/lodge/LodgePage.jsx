@@ -29,6 +29,8 @@ import {
 import { Link, useNavigate } from 'react-router-dom'; // Ensure 'useNavigate' is imported
 import footerImg from '../../assets/images/Footer_img.webp';
 import LoadingScreen from '../../components/Loading';
+import { useSelector } from 'react-redux';
+import FormAuthGuard from '../../components/FormAuthGuard';
 
 const lodgeFeatures = [
   {
@@ -73,6 +75,7 @@ const LodgePage = () => {
   const [selectedRoomType, setSelectedRoomType] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('paypal');
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     document.title = 'Dorze Lodge';
@@ -303,62 +306,67 @@ const LodgePage = () => {
           {/* Booking Form */}
           <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-[#FFDA32]/20 hover:border-[#F29404] transition-colors lg:sticky lg:top-8">
             <h2 className="text-2xl font-bold mb-6">Book Your Stay</h2>
-            <form onSubmit={handleBooking} className="space-y-6">
-              <div className="space-y-4">
-                <label className="block font-semibold">Guests</label>
-                <input
-                  type="number"
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#F29404] focus:ring-2 focus:ring-[#F29404]/20"
-                  min="1"
-                />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
+            <FormAuthGuard formTitle="lodge booking">
+              <form onSubmit={handleBooking} className="space-y-6">
                 <div className="space-y-4">
-                  <label className="block font-semibold">Check-in</label>
+                  <label className="block font-semibold">Guests</label>
                   <input
-                    type="date"
-                    value={checkInDate}
-                    onChange={(e) => setCheckInDate(e.target.value)}
+                    type="number"
+                    value={guests}
+                    onChange={(e) => setGuests(e.target.value)}
                     className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#F29404] focus:ring-2 focus:ring-[#F29404]/20"
+                    min="1"
                   />
                 </div>
-                <div className="space-y-4">
-                  <label className="block font-semibold">Check-out</label>
-                  <input
-                    type="date"
-                    value={checkOutDate}
-                    onChange={(e) => setCheckOutDate(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#F29404] focus:ring-2 focus:ring-[#F29404]/20"
-                  />
-                </div>
-              </div>
 
-              <div className="space-y-4">
-                <label className="block font-semibold">Room Type</label>
-                <select
-                  value={selectedRoomType}
-                  onChange={(e) => setSelectedRoomType(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#F29404] focus:ring-2 focus:ring-[#F29404]/20"
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <label className="block font-semibold">Check-in Date</label>
+                    <input
+                      type="date"
+                      value={checkInDate}
+                      onChange={(e) => setCheckInDate(e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#F29404] focus:ring-2 focus:ring-[#F29404]/20"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="block font-semibold">Check-out Date</label>
+                    <input
+                      type="date"
+                      value={checkOutDate}
+                      onChange={(e) => setCheckOutDate(e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#F29404] focus:ring-2 focus:ring-[#F29404]/20"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="block font-semibold">Room Type</label>
+                  <select
+                    value={selectedRoomType}
+                    onChange={(e) => setSelectedRoomType(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-[#F29404] focus:ring-2 focus:ring-[#F29404]/20"
+                  >
+                    <option value="">Select Room Type</option>
+                    {lodge.roomTypes?.map((room) => (
+                      <option key={room._id} value={room.type}>
+                        {room.type} (${room.price}/night)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-[#F29404] text-white font-bold rounded-xl hover:bg-[#DB8303] transition-colors shadow-lg hover:shadow-xl"
                 >
-                  <option value="">Select Room Type</option>
-                  {lodge.roomTypes?.map((room) => (
-                    <option key={room._id} value={room.type}>
-                      {room.type} (${room.price}/night)
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 bg-[#F29404] text-white font-bold rounded-xl hover:bg-[#DB8303] transition-colors shadow-lg hover:shadow-xl"
-              >
-                Confirm Booking
-              </button>
-            </form>
+                  Confirm Booking
+                </button>
+              </form>
+            </FormAuthGuard>
           </div>
         </div>
       </div>

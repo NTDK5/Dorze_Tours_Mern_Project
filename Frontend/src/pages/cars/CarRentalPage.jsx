@@ -8,6 +8,7 @@ import carouselBg from '../../assets/images/carousel-2.jpg';
 import CountUp from 'react-countup';
 import factBg from '../../assets/images/fact-bg.jpg';
 import { toast } from 'react-hot-toast';
+import FormAuthGuard from '../../components/FormAuthGuard';
 
 const CarRentalPage = () => {
     const navigate = useNavigate();
@@ -124,122 +125,132 @@ const CarRentalPage = () => {
 
             <div className="container mx-auto px-4 py-8 -mt-10 relative z-10 ">
                 {/* Booking Form */}
-                <form onSubmit={handleBookingSubmit} className="bg-white p-6 rounded-lg shadow-lg mb-8 lg:translate-y-[-25%]">
-                    <h2 className="text-2xl font-bold mb-6">Book Your Car</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Pickup Location */}
-                        <div>
-                            <label className="block text-gray-700 mb-2 font-semibold">
-                                <FaMapMarkedAlt className="inline mr-2" />
-                                Pickup Location
-                            </label>
-                            <input
-                                type="text"
-                                value={bookingData.pickupLocation}
-                                onChange={(e) => setBookingData({
-                                    ...bookingData,
-                                    pickupLocation: e.target.value
-                                })}
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                placeholder="Enter pickup location"
-                                required
-                            />
-                        </div>
+                <section className="py-12 bg-gray-50">
+                    <div className="container mx-auto px-4">
+                        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-[#FFDA32] to-[#F29404] bg-clip-text text-transparent">
+                            Reserve a Vehicle
+                        </h2>
 
-                        {/* Dropoff Location */}
-                        <div>
-                            <label className="block text-gray-700 mb-2 font-semibold">
-                                <FaMapMarkedAlt className="inline mr-2" />
-                                Drop-off Location
-                            </label>
-                            <input
-                                type="text"
-                                value={bookingData.dropoffLocation}
-                                onChange={(e) => setBookingData({
-                                    ...bookingData,
-                                    dropoffLocation: e.target.value
-                                })}
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                placeholder="Enter drop-off location"
-                                required
-                            />
-                        </div>
+                        <FormAuthGuard formTitle="car rental">
+                            <form onSubmit={handleBookingSubmit} className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-2xl font-bold mb-6">Book Your Car</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Pickup Location */}
+                                    <div>
+                                        <label className="block text-gray-700 mb-2 font-semibold">
+                                            <FaMapMarkedAlt className="inline mr-2" />
+                                            Pickup Location
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={bookingData.pickupLocation}
+                                            onChange={(e) => setBookingData({
+                                                ...bookingData,
+                                                pickupLocation: e.target.value
+                                            })}
+                                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter pickup location"
+                                            required
+                                        />
+                                    </div>
 
-                        {/* Pickup Date */}
-                        <div>
-                            <label className="block text-gray-700 mb-2 font-semibold">
-                                <FaCalendarAlt className="inline mr-2" />
-                                Pickup Date
-                            </label>
-                            <input
-                                type="date"
-                                value={bookingData.pickupDate}
-                                onChange={(e) => setBookingData({
-                                    ...bookingData,
-                                    pickupDate: e.target.value
-                                })}
-                                min={new Date().toISOString().split('T')[0]}
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                required
-                            />
-                        </div>
+                                    {/* Dropoff Location */}
+                                    <div>
+                                        <label className="block text-gray-700 mb-2 font-semibold">
+                                            <FaMapMarkedAlt className="inline mr-2" />
+                                            Drop-off Location
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={bookingData.dropoffLocation}
+                                            onChange={(e) => setBookingData({
+                                                ...bookingData,
+                                                dropoffLocation: e.target.value
+                                            })}
+                                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter drop-off location"
+                                            required
+                                        />
+                                    </div>
 
-                        {/* Pickup Time */}
-                        <div>
-                            <label className="block text-gray-700 mb-2 font-semibold">
-                                <FaClock className="inline mr-2" />
-                                Pickup Time
-                            </label>
-                            <input
-                                type="time"
-                                value={bookingData.pickupTime}
-                                onChange={(e) => setBookingData({
-                                    ...bookingData,
-                                    pickupTime: e.target.value
-                                })}
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                required
-                            />
-                        </div>
+                                    {/* Pickup Date */}
+                                    <div>
+                                        <label className="block text-gray-700 mb-2 font-semibold">
+                                            <FaCalendarAlt className="inline mr-2" />
+                                            Pickup Date
+                                        </label>
+                                        <input
+                                            type="date"
+                                            value={bookingData.pickupDate}
+                                            onChange={(e) => setBookingData({
+                                                ...bookingData,
+                                                pickupDate: e.target.value
+                                            })}
+                                            min={new Date().toISOString().split('T')[0]}
+                                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            required
+                                        />
+                                    </div>
 
-                        {/* Dropoff Date */}
-                        <div>
-                            <label className="block text-gray-700 mb-2 font-semibold">
-                                <FaCalendarAlt className="inline mr-2" />
-                                Drop-off Date
-                            </label>
-                            <input
-                                type="date"
-                                value={bookingData.dropoffDate}
-                                onChange={(e) => setBookingData({
-                                    ...bookingData,
-                                    dropoffDate: e.target.value
-                                })}
-                                min={bookingData.pickupDate || new Date().toISOString().split('T')[0]}
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                required
-                            />
-                        </div>
+                                    {/* Pickup Time */}
+                                    <div>
+                                        <label className="block text-gray-700 mb-2 font-semibold">
+                                            <FaClock className="inline mr-2" />
+                                            Pickup Time
+                                        </label>
+                                        <input
+                                            type="time"
+                                            value={bookingData.pickupTime}
+                                            onChange={(e) => setBookingData({
+                                                ...bookingData,
+                                                pickupTime: e.target.value
+                                            })}
+                                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            required
+                                        />
+                                    </div>
 
-                        {/* Dropoff Time */}
-                        <div>
-                            <label className="block text-gray-700 mb-2 font-semibold">
-                                <FaClock className="inline mr-2" />
-                                Drop-off Time
-                            </label>
-                            <input
-                                type="time"
-                                value={bookingData.dropoffTime}
-                                onChange={(e) => setBookingData({
-                                    ...bookingData,
-                                    dropoffTime: e.target.value
-                                })}
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                required
-                            />
-                        </div>
+                                    {/* Dropoff Date */}
+                                    <div>
+                                        <label className="block text-gray-700 mb-2 font-semibold">
+                                            <FaCalendarAlt className="inline mr-2" />
+                                            Drop-off Date
+                                        </label>
+                                        <input
+                                            type="date"
+                                            value={bookingData.dropoffDate}
+                                            onChange={(e) => setBookingData({
+                                                ...bookingData,
+                                                dropoffDate: e.target.value
+                                            })}
+                                            min={bookingData.pickupDate || new Date().toISOString().split('T')[0]}
+                                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Dropoff Time */}
+                                    <div>
+                                        <label className="block text-gray-700 mb-2 font-semibold">
+                                            <FaClock className="inline mr-2" />
+                                            Drop-off Time
+                                        </label>
+                                        <input
+                                            type="time"
+                                            value={bookingData.dropoffTime}
+                                            onChange={(e) => setBookingData({
+                                                ...bookingData,
+                                                dropoffTime: e.target.value
+                                            })}
+                                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </form>
+                        </FormAuthGuard>
                     </div>
-                </form>
+                </section>
 
                 {/* Filters Section */}
                 <div className="bg-white p-6 rounded-lg shadow-lg mb-8">

@@ -49,7 +49,6 @@ function HomePage() {
   const filteredDestination = destinationData.find(
     (destination) => destination.name === filter
   );
-  if (isLoading) return <LoadingScreen />;
   return (
     <div className="relative flex flex-col items-center justify-center">
       <HeroSection />
@@ -327,7 +326,7 @@ function HomePage() {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
               <img
                 className="w-full h-[500px] object-cover transform transition-transform duration-500 group-hover:scale-105"
-                src="/assets/images/Rectangle 158.webp"
+                src="https://public.vaolo.com/i/photo/large_4x3/eyJpZCI6IndwLWNvbnRlbnQvdXBsb2Fkcy8yMDE4LzEyL0J1bmdhbG93cy0yLTIuanBnIiwic3RvcmFnZSI6InN0b3JlIn0?signature=a215481c17c832225499705c39a82960e40f595e4df11b2dbf8c7373839b8333"
                 alt="Dorze Lodge"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
