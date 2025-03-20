@@ -1,5 +1,5 @@
 import React from 'react';
-// import loaderGif from '../assets/loading.gif';
+
 
 function LoadingScreen() {
   return (
