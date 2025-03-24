@@ -2,37 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Main Pages -->
   <url>
-    <loc>https://dorzeetours.com/</loc>
+    <loc>https://www.dorzetours.com/</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://dorzeetours.com/our_packages</loc>
+    <loc>https://www.dorzetours.com/our_packages</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://dorzeetours.com/about_us</loc>
+    <loc>https://www.dorzetours.com/about_us</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dorzeetours.com/gallery</loc>
+    <loc>https://www.dorzetours.com/gallery</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dorzeetours.com/dorze_lodge</loc>
+    <loc>https://www.dorzetours.com/dorze_lodge</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dorzeetours.com/cars</loc>
+    <loc>https://www.dorzetours.com/cars</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -40,13 +40,13 @@
   
   <!-- Authentication Pages -->
   <url>
-    <loc>https://dorzeetours.com/login</loc>
+    <loc>https://www.dorzetours.com/login</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://dorzeetours.com/register</loc>
+    <loc>https://www.dorzetours.com/register</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -54,13 +54,13 @@
   
   <!-- User Account Pages -->
   <url>
-    <loc>https://dorzeetours.com/profile</loc>
+    <loc>https://www.dorzetours.com/profile</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://dorzeetours.com/profile/booking_history</loc>
+    <loc>https://www.dorzetours.com/profile/booking_history</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
@@ -68,13 +68,13 @@
   
   <!-- Checkout Process -->
   <url>
-    <loc>https://dorzeetours.com/checkout</loc>
+    <loc>https://www.dorzetours.com/checkout</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://dorzeetours.com/payment/success</loc>
+    <loc>https://www.dorzetours.com/payment/success</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
@@ -82,7 +82,7 @@
   
   <!-- Utility Pages -->
   <url>
-    <loc>https://dorzeetours.com/verify_email</loc>
+    <loc>https://www.dorzetours.com/verify_email</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.2</priority>
@@ -91,7 +91,7 @@
   <!-- Dynamic Tour Pages - These would be generated programmatically -->
   <!-- Example:
   <url>
-    <loc>https://dorzeetours.com/tour/123</loc>
+    <loc>https://www.dorzetours.com/tour/123</loc>
     <lastmod>2023-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
