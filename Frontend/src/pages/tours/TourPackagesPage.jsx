@@ -8,6 +8,8 @@ import { fetchTotalTours } from '../../services/tourApi';
 import { Link } from 'react-router-dom';
 import LoadingScreen from '../../components/Loading';
 import heroimg from '../../assets/images/tour-hero.webp'
+import PageMeta from '../../components/PageMeta';
+
 const TourPackagesPage = () => {
   const [selectedDestinations, setSelectedDestinations] = useState(['All']);
   const [selectedDurations, setSelectedDurations] = useState(['All']);
@@ -80,6 +82,11 @@ const TourPackagesPage = () => {
 
   return (
     <>
+      <PageMeta
+        title="Tour Packages - Dorze Tours"
+        description="Explore our curated tour packages across Ethiopia. Cultural, historical, and nature tours for every traveler."
+        keywords="Ethiopia tour packages, cultural tours, historical tours, nature tours"
+      />
       <section className="relative h-[50vh] flex items-center justify-center">
         <div className="absolute inset-0 bg-black/50 z-10"></div>
         <img

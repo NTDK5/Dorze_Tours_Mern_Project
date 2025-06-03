@@ -31,6 +31,7 @@ import footerImg from '../../assets/images/Footer_img.webp';
 import LoadingScreen from '../../components/Loading';
 import { useSelector } from 'react-redux';
 import FormAuthGuard from '../../components/FormAuthGuard';
+import PageMeta from '../../components/PageMeta';
 
 const lodgeFeatures = [
   {
@@ -177,9 +178,15 @@ const LodgePage = () => {
 
   return (
     <>
+      <PageMeta
+        title="Dorze Lodge - Authentic Cultural Experience"
+        description="Experience authentic Dorze culture in the Ethiopian highlands. Book your stay at our community-run lodge with panoramic mountain views."
+        keywords="Dorze Lodge, Ethiopia, cultural experience, mountain lodge, community tourism"
+      />
       {/* Hero Section */}
       <section className="relative h-[50vh] flex items-center justify-center">
         <div className="absolute inset-0 bg-black/50 z-10"></div>
+
         <img
           src={lodge.images[0]}
           className="absolute inset-0 w-full h-full object-cover"
