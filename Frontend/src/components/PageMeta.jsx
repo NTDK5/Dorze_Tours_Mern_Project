@@ -1,3 +1,4 @@
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const PageMeta = ({ title, description, keywords }) => {
@@ -12,4 +13,4 @@ const PageMeta = ({ title, description, keywords }) => {
     );
 };
 
-export default PageMeta; 
+export default PageMeta;

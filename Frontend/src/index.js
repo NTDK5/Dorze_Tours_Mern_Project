@@ -44,6 +44,7 @@ const queryClient = new QueryClient();
 import AdminCarsPage from './pages/admin/AdminCarsPage';
 import AdminReviewsPage from './pages/reviews/AdminReviewsPage';
 import CustomTripsAdmin from './pages/admin/CustomTripsAdmin';
+import { HelmetProvider } from 'react-helmet-async';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -88,9 +89,11 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <ErrorBoundary>
-          <RouterProvider router={router} />
-        </ErrorBoundary>
+        <HelmetProvider>
+          <ErrorBoundary>
+            <RouterProvider router={router} />
+          </ErrorBoundary>
+        </HelmetProvider>
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>
